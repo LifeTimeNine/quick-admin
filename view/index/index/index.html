@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>upload</title>
+  <script src="/static/js/upload.js"></script>
+</head>
+<body>
+  <input type="file" id="file">
+</body>
+<script>
+  window.onload = function () {
+    var upload = new Upload('http://127.0.0.1');
+    upload.onMd5Progress(function(loaded, total) {
+      console.log('md5', loaded, total, (loaded/total).toFixed(2)*100);
+    }).onProgress(function(loaded, total) {
+      console.log('upload', loaded, total, (loaded/total).toFixed(2)*100);
+    });
+    upload.onSuccess(function(url) {
+      console.log(url)
+    })
+    document.getElementById('file').onchange = function(e) {
+      upload.partSave(e.currentTarget.files[0]);
+      // upload.save(e.currentTarget.files[0]);
+    }
+  }
+</script>
+</html>
