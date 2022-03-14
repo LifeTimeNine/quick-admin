@@ -26,15 +26,45 @@ class Query extends \think\db\Where
     }
 
     /**
+     * 获取排序规则
+     * @access  public
+     * @param   string  $fields  允许排序的字段
+     * @param   string  $queryName  参数名称
+     * @param   string  $type       处理方法
+     * @param   string  $alias      别名分隔符
+     * @param   string  $separator  排序参数分割符
+     * @return  string
+     */
+    public function sortRule($fields, string $queryName = 'sort_rule', string $type = 'get', string $alias = ':', string $separator = '.')
+    {
+        $fieldRules = [];
+        foreach(is_array($fields)?$fields:explode(',', $fields) as $field) {
+            $dk = $qk = $field;
+            if (stripos($field, $alias) !== false) {
+                list($dk, $qk) = explode($alias, $field);
+            }
+            $fieldRules[$qk] = $dk;
+        }
+        $rules = [];
+        foreach(explode(',', call_user_func([$this->request, $type], $queryName, '')) as $rule) {
+            [$field, $sortRule] = explode($separator, $rule);
+            if (array_key_exists($field, $fieldRules) && in_array($sortRule, ['asc', 'desc'])) {
+                $rules[$fieldRules[$field]] = $sortRule;
+            }
+        }
+        return $rules;
+    }
+
+    /**
      * 解析查询参数
      * @access  public
      * @param   array|string    $fields     查询字段
-     * @param   string          $callable   处理方法
+     * @param   callable        $callable   处理方法
      * @param   string          $type       输入类型
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function parseParam($fields, $callable, $type = 'get', $alias = '@')
+    public function parseParam($fields, callable $callable, string $type = 'get', string $alias = ':')
     {
         foreach(is_array($fields)?$fields:explode(',', $fields) as $field) {
             $dk = $qk = $field;
@@ -58,7 +88,7 @@ class Query extends \think\db\Where
      * @param   mixed   $value      值
      * @return  $this
      */
-    public function append($field, $condition, $value)
+    public function append(string $field, string $condition, $value)
     {
         $this->where[$field] = [$condition, $value];
         return $this;
@@ -72,7 +102,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function like($fields, $type = 'get', $alias = '@')
+    public function like($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, 'like', "%{$value}%");
@@ -86,7 +116,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function notLike($fields, $type = 'get', $alias = '@')
+    public function notLike($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, 'notLike', "%{$value}%");
@@ -100,7 +130,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function in($fields, $type = 'get', $alias = '@')
+    public function in($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, 'in', $value);
@@ -114,7 +144,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function notIn($fields, $type = 'get', $alias = '@')
+    public function notIn($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, 'notIn', $value);
@@ -128,7 +158,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function equal($fields, $type = 'get', $alias = '@')
+    public function equal($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, '=', $value);
@@ -142,7 +172,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function notEqual($fields, $type = 'get', $alias = '@')
+    public function notEqual($fields, string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) {
             $this->append($dk, '<>', $value);
@@ -157,7 +187,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function between($fields, $split = ' - ', $type = 'get', $alias = '@')
+    public function between($fields, string $split = ' - ', string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) use($split){
             $this->append($dk, 'between', explode($split, $value));
@@ -172,7 +202,7 @@ class Query extends \think\db\Where
      * @param   string          $alias      别名分隔符
      * @return  $this
      */
-    public function notBetween($fields, $split = ' - ', $type = 'get', $alias = '@')
+    public function notBetween($fields, string $split = ' - ', string $type = 'get', string $alias = ':')
     {
         $this->parseParam($fields, function($dk, $value) use($split){
             $this->append($dk, 'notBetween', explode($split, $value));

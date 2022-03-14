@@ -36,6 +36,10 @@ class Code
      */
     const TOKEN_EXPIRE = [10102, '身份信息已过期请重新登录'];
     /**
+     * token 刷新失败
+     */
+    const TOKEN_REFRESH_FAIL = [10103, '身份信息刷新失败'];
+    /**
      * 用户被禁用
      */
     const USER_DISABLE = [10201, '账户已被禁用，请联系管理员'];

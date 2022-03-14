@@ -2,15 +2,18 @@
 
 namespace service;
 
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
+use traits\tools\Error;
 use traits\tools\Instance;
 
 /**
- * Token相关业务
+ * Token 相关服务
  */
 class Token
 {
-    use Instance;
+    use Instance,Error;
 
     /**
      * 当前应用
@@ -19,21 +22,28 @@ class Token
     protected $app;
 
     /**
-     * 模块名称
+     * 应用名称
      * @var string
      */
-    protected $moduleName = '';
+    protected $appName;
 
     /**
-     * Token原始数据
-     * @var object
+     * 请求域名
+     * @var string
+     */
+    protected $domain;
+
+    /**
+     * Token 数据
+     * @var array
      */
     protected $data;
 
-    protected function __construct($modelName)
+    public function __construct()
     {
         $this->app = app();
-        $this->moduleName = $modelName;
+        $this->appName = $this->app->http->getName();
+        $this->domain = $this->app->request->domain();
     }
 
     /**
@@ -42,87 +52,122 @@ class Token
      * @param   string  $name
      * @retrurn mixed
      */
-    protected function config($name = '')
+    protected function config($name = null)
     {
         if (empty($name)) {
-            return $this->app->config->get("token.{$this->moduleName}");
+            return $this->app->config->get("token");
         } else {
-            return $this->app->config->get("token.{$this->moduleName}.{$name}");
+            return $this->app->config->get("token.{$name}");
+        }
+    }
+    /**
+     * 获取应用配置
+     * @access  protected
+     * @param   string  $name
+     * @return  mixed
+     */
+    protected function appConfig($name = null)
+    {
+        if (empty($name)) {
+            return $this->config("apps.{$this->appName}");
+        } else {
+            return $this->config("apps.{$this->appName}.{$name}");
         }
     }
 
     /**
-     * UID生成token
+     * 构建Token
      * @access  public
-     * @param   int     $uid
-     * @return  string
+     * @param   mixed   $data       额外数据
+     * @param   string  $sub        主题
+     * @return  array
      */
-    public function uidBuild($uid)
+    public function build($data, string $sub = null)
     {
         $time = $this->app->request->time();
-        $tokenData = [
-            'iss' => $this->config('iss'),
-            'aud' => $this->config('aud'),
+        $payload = [
+            'iss' => $this->domain,
+            'sub' => $sub,
+            'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'uid' => $uid,
+            'exp' => $time + $this->appConfig('exp'),
+            'data' => $data
         ];
-        if (!empty($this->config('exp'))) $tokenData['exp'] =  $time + $this->config('exp');
-
-        return JWT::encode($tokenData, $this->config('salt'), 'HS256');
-    }
-
-    /**
-     * 数据集生成token
-     * @access  public
-     * @param   array   $data
-     * @return  string
-     */
-    public function dataBuild($data)
-    {
-        $time = $this->app->request->time();
-        $tokenData = [
-            'iss' => $this->config('iss'),
-            'aud' => $this->config('aud'),
+        $refreshPaylod = [
+            'iss' => $this->domain,
+            'sub' => $sub,
+            'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'data' => $data,
+            'exp' => $payload['exp'] + $this->appConfig('refresh_exp'),
+            'data' => $data
         ];
-        if (!empty($this->config('exp'))) $tokenData['exp'] =  $time + $this->config('exp');
-
-        return JWT::encode($tokenData, $this->config('salt'), 'HS256');
+        return [
+            'access_token' => JWT::encode($payload, $this->config('salt')),
+            'expire' => $this->appConfig('exp'),
+            'refresh_token' => JWT::encode($refreshPaylod, $this->config('refresh_salt'))
+        ];
     }
-
     /**
-     * 解析 UID token
+     * 解析Token
      * @access  public
-     * @param   string  $token
-     * @return  string
+     * @param   string  $token  Token
+     * @param   string  $sub    主题
+     * @return  mixed
      */
-    public function parseUid($token)
+    public function parse(string $token, string $sub = null)
     {
-        $this->data = JWT::decode($token, $this->config('salt'), ['HS256']);
-        return $this->data->uid;
+        try {
+            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('salt'), ['HS256'])), true);
+        } catch(ExpiredException $e) { // token过期
+            $this->setError(Code::TOKEN_EXPIRE);
+            return false;
+        } catch (\Throwable $th) { //其他异常
+            $this->setError(Code::TOKEN_ERROR);
+            return false;
+        }
+        if (
+            $this->data['iss'] <> $this->domain ||
+            $this->data['sub'] <> $sub ||
+            $this->data['aud'] <> $this->appName
+        ) {
+            $this->setError(Code::TOKEN_ERROR);
+            return false;
+        }
+        return $this->data['data'];
     }
-
     /**
-     * 解析 数据 token
+     * 解析刷新Token
      * @access  public
-     * @param   string  $token
-     * @retrun  Object
+     * @param   string  $refreshToken   刷新Token
+     * @param   string  $sub            主题
+     * @return  mixed
      */
-    public function parseData($token)
+    public function parseRefresh(string $token, string $sub = null)
     {
-        $this->data = JWT::decode($token, $this->config('salt'), ['HS256']);
-        return $this->data->data;
+        try {
+            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('refresh_salt'), ['HS256'])), true);
+        } catch (\Throwable $th) { //其他异常
+            $this->setError(Code::TOKEN_ERROR);
+            return false;
+        }
+        if (
+            $this->data['iss'] <> $this->domain ||
+            $this->data['sub'] <> $sub ||
+            $this->data['aud'] <> $this->appName
+        ) {
+            $this->setError(Code::TOKEN_ERROR);
+            return false;
+        }
+        return $this->data['data'];
     }
-
     /**
-     * 获取解析到的原始数据
+     * 获取Token所有数据
      * @access  public
-     * @return  object
+     * @return  array
      */
-    public function getData()
+    public function getAll()
     {
         return $this->data;
     }

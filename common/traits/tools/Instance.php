@@ -20,7 +20,7 @@ trait Instance
      */
     public static function instance()
     {
-        $key = hash('sha256', get_called_class() . serialize(func_get_args()));
+        $key = sha1(get_called_class() . serialize(func_get_args()));
         if (!isset(self::$instanceList[$key])) {
             self::$instanceList[$key] = new static(...func_get_args());
         }
