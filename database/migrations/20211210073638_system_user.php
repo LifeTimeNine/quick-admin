@@ -3,7 +3,6 @@
 use Phinx\Db\Table\Index;
 use think\migration\Migrator;
 use think\migration\db\Column;
-use think\migration\db\Table;
 
 class SystemUser extends Migrator
 {
@@ -12,6 +11,8 @@ class SystemUser extends Migrator
         $table = $this->table('system_user', ['id'=>false,'primary_key'=>'id', 'comment'=>'系统用户表','collation'=>'utf8mb4_general_ci'])
             ->addColumn(Column::integer('id')->setLimit(10)->setNull(false)->setIdentity(true)->setSigned(false)->setComment('id'))
             ->addColumn(Column::string('username', 64)->setNull(false)->setComment('用户名'))
+            ->addColumn(Column::string('mobile', 16)->setNull(true)->setComment('手机号'))
+            ->addColumn(Column::string('email', 100)->setNull(true)->setComment('邮箱'))
             ->addColumn(Column::string('password', 32)->setNull(false)->setComment('密码'))
             ->addColumn(Column::string('avatar')->setNull(true)->setComment('头像'))
             ->addColumn(Column::string('name', 32)->setNull(true)->setComment('姓名'))

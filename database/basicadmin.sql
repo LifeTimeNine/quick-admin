@@ -188,6 +188,8 @@ DROP TABLE IF EXISTS `system_user`;
 CREATE TABLE `system_user`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
   `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
+  `mobile` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '姓名',
@@ -200,12 +202,12 @@ CREATE TABLE `system_user`  (
   `delete_time` datetime(0) NULL DEFAULT NULL COMMENT '软删除标记',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, '超级管理员', '这是一个超级管理员账户', '2022-02-20 14:15:29', 1, '2022-03-09 19:20:02', 3232246728, 64, NULL);
+INSERT INTO `system_user` VALUES (1, 'admin', NULL, NULL, 'e10adc3949ba59abbe56e057f20f883e', NULL, '超级管理员', '这是一个超级管理员账户', '2022-02-20 14:15:29', 1, '2022-03-09 19:20:02', 3232246728, 64, NULL);
 
 -- ----------------------------
 -- Table structure for system_user_role

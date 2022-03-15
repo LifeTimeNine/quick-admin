@@ -4,7 +4,6 @@ namespace service;
 
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
-use Firebase\JWT\SignatureInvalidException;
 use traits\tools\Error;
 use traits\tools\Instance;
 
@@ -85,13 +84,15 @@ class Token
     public function build($data, string $sub = null)
     {
         $time = $this->app->request->time();
+        $jti = sha1("{$this->domain}{$this->appName}{$sub}" . serialize($data));
         $payload = [
             'iss' => $this->domain,
             'sub' => $sub,
             'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'exp' => $time + $this->appConfig('exp'),
+            'exp' => $time + $this->appConfig('expire', $this->config('default_expire')),
+            'jti' => $jti,
             'data' => $data
         ];
         $refreshPaylod = [
@@ -100,13 +101,61 @@ class Token
             'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'exp' => $payload['exp'] + $this->appConfig('refresh_exp'),
+            'jti' => $jti,
             'data' => $data
+        ];
+        $this->setJtiTime($jti, $time);
+        return [
+            'access_token' => JWT::encode($payload, $this->config('salt')),
+            'expire' => $payload['exp'],
+            'refresh_token' => JWT::encode($refreshPaylod, $this->config('refresh_salt'))
+        ];
+    }
+    /**
+     * 刷新Token
+     * @access  public
+     * @param   string      $token      Token
+     * @param   string      $sub        主题
+     * @param   callable    $callable   自定义验证方法
+     * @return  array
+     */
+    public function refresh(string $token, string $sub, callable $callable = null)
+    {
+        try {
+            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('refresh_salt'), ['HS256'])), true);
+        } catch (\Throwable $th) { //其他异常
+            $this->setError(Code::TOKEN_REFRESH_FAIL);
+            return false;
+        }
+        if (
+            $this->data['iss'] <> $this->domain ||
+            $this->data['sub'] <> $sub ||
+            $this->data['aud'] <> $this->appName
+        ) {
+            $this->setError(Code::TOKEN_REFRESH_FAIL);
+            return false;
+        }
+        if (is_callable($callable)) {
+            $res = call_user_func($callable, $this->data);
+            if ($res !== true) {
+                $this->setError($res);
+                return false;
+            }
+        }
+        $time = $this->app->request->time();
+        $payload = [
+            'iss' => $this->domain,
+            'sub' => $sub,
+            'aud' => $this->appName,
+            'iat' => $time,
+            'nbf' => $time,
+            'exp' => $time + $this->appConfig('expire', $this->config('default_expire')),
+            'jti' => $this->data['jti'],
+            'data' => $this->data['data']
         ];
         return [
             'access_token' => JWT::encode($payload, $this->config('salt')),
-            'expire' => $this->appConfig('exp'),
-            'refresh_token' => JWT::encode($refreshPaylod, $this->config('refresh_salt'))
+            'expire' => $payload['exp'],
         ];
     }
     /**
@@ -127,6 +176,7 @@ class Token
             $this->setError(Code::TOKEN_ERROR);
             return false;
         }
+        /// 验证 信息
         if (
             $this->data['iss'] <> $this->domain ||
             $this->data['sub'] <> $sub ||
@@ -135,29 +185,9 @@ class Token
             $this->setError(Code::TOKEN_ERROR);
             return false;
         }
-        return $this->data['data'];
-    }
-    /**
-     * 解析刷新Token
-     * @access  public
-     * @param   string  $refreshToken   刷新Token
-     * @param   string  $sub            主题
-     * @return  mixed
-     */
-    public function parseRefresh(string $token, string $sub = null)
-    {
-        try {
-            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('refresh_salt'), ['HS256'])), true);
-        } catch (\Throwable $th) { //其他异常
-            $this->setError(Code::TOKEN_ERROR);
-            return false;
-        }
-        if (
-            $this->data['iss'] <> $this->domain ||
-            $this->data['sub'] <> $sub ||
-            $this->data['aud'] <> $this->appName
-        ) {
-            $this->setError(Code::TOKEN_ERROR);
+        // 验证有效性
+        if ($this->data['iat'] < $this->getJtiTime($this->data['jti'])) {
+            $this->setError(Code::TOKEN_FIALURE);
             return false;
         }
         return $this->data['data'];
@@ -170,5 +200,25 @@ class Token
     public function getAll()
     {
         return $this->data;
+    }
+
+    /**
+     * 设置jti时间
+     * @access  protected
+     * @param   string  $jti
+     * @param   int     $time
+     */
+    protected function setJtiTime(string $jti, int $time)
+    {
+        $this->app->cache->set("jti_{$jti}", $time);
+    }
+    /**
+     * 获取jti时间
+     * @access  protected
+     * @return  int
+     */
+    protected function getJtiTime(string $jti)
+    {
+        return $this->app->cache->get("jti_{$jti}");
     }
 }

@@ -40,6 +40,10 @@ class Code
      */
     const TOKEN_REFRESH_FAIL = [10103, '身份信息刷新失败'];
     /**
+     * token 失效
+     */
+    const TOKEN_FIALURE = [10104, '身份信息已失效'];
+    /**
      * 用户被禁用
      */
     const USER_DISABLE = [10201, '账户已被禁用，请联系管理员'];

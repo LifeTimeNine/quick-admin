@@ -6,7 +6,6 @@ use model\SystemMenu;
 use model\SystemUser as SystemUserModel;
 use model\SystemUserRole;
 use service\Node;
-use service\Token;
 use service\Code;
 use tools\Query;
 use tools\Tools;
@@ -19,34 +18,6 @@ use validate\SystemUser as SystemUserValidate;
 class Systemuser extends Basic
 {
     use QuickAction;
-
-    /**
-     * 密码登录
-     */
-    public function pwdLogin()
-    {
-        $username = $this->request->post('username');
-        $password = $this->request->post('password');
-        if (empty($username) || empty($password)) {
-            $this->error(Code::PARAM_ERROR, '用户名或密码不存在');
-        }
-        $user = SystemUserModel::getByUsername($username);
-        if (empty($user) || $user->password <> $password) {
-            $this->error(Code::PARAM_ERROR, '用户名或密码不存在');
-        }
-        if ($user->status <> 1) {
-            $this->error(Code::USER_DISABLE);
-        }
-        $user->save([
-            'last_login_time' => date('Y-m-d H:i:s', $this->request->time()),
-            'last_login_ip' => $this->request->ip(),
-            'login_num' => ['inc', 1]
-        ]);
-        $this->app->request->withMiddleware(['system_user_model' => $user]);
-        $this->returnMap([
-            'access_token' => Token::instance('admin')->uidBuild($user->id)
-        ]);
-    }
     /**
      * 获取用户信息
      */

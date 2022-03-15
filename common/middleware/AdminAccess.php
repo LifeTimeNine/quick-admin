@@ -3,8 +3,6 @@
 namespace middleware;
 
 use basic\AccessMiddleware;
-use Firebase\JWT\ExpiredException;
-use Firebase\JWT\SignatureInvalidException;
 use model\SystemActionLog;
 use model\SystemUser;
 use service\Node;
@@ -17,8 +15,8 @@ use service\Code;
 class AdminAccess extends AccessMiddleware
 {
     protected $white = [
+        'auth' => ['pwd','refresh'],
         'systemconfig' => ['basic'],
-        'systemuser' => ['pwdLogin'],
         'upload' => ['file', 'part']
     ];
 
@@ -46,16 +44,11 @@ class AdminAccess extends AccessMiddleware
         if ($this->isWhite()) return $next($request);
 
         // 获取token
-        $accessToken = $request->header('access-token');
-        try {
-            // 验证token
-            $uid = Token::instance('admin')->parseUid($accessToken);
-        } catch(SignatureInvalidException $e) { // token不正确
-            return json(Code::buildMsg(Code::TOKEN_ERROR));
-        } catch(ExpiredException $e) { // token过期
-            return json(Code::buildMsg(Code::TOKEN_EXPIRE));
-        } catch (\Throwable $th) { //其他异常
-            return json(Code::buildMsg(Code::TOKEN_ERROR));
+        $accessToken = $request->header('access-token', '');
+        $tokenService = Token::instance();
+        $uid = $tokenService->parse($accessToken, 'login');
+        if ($uid === false) {
+            return json(Code::buildMsg($tokenService->getError()));
         }
         // 获取用户信息
         $userModel = SystemUser::find($uid);
@@ -64,7 +57,7 @@ class AdminAccess extends AccessMiddleware
         // 验证用户状态
         if ($userModel->status <> 1) return json(Code::buildMsg(Code::USER_DISABLE));
         // 验证最后登录时间
-        if (date('Y-m-d H:i:s', Token::instance('admin')->getData()->iat) <> $userModel->last_login_time) {
+        if (date('Y-m-d H:i:s', $tokenService->getAll()['iat']) <> $userModel->last_login_time) {
             return json(Code::buildMsg(Code::USER_LOGIN));
         }
         $request->withMiddleware(['system_user_model' => $userModel]);

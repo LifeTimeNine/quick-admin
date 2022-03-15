@@ -13,11 +13,6 @@ class Index
 {
     public function index()
     {
-        $tokenService = Token::instance();
-        $tokens = $tokenService->build(['id' => 1]);
-        dump($tokens);
-        dump($tokenService->parse($tokens['access_token'] . '1'));
-        dump($tokenService->getError());
         dump(app()->isDebug());
     }
 
