@@ -142,7 +142,7 @@ class Systemrole extends Basic
     public function modifyRoleNodes()
     {
         if (empty(SystemRoleModel::find($this->request->post('srid')))) {
-            $this->error(Code::DATA_EXIST);
+            $this->error(Code::DATA_NOT_EXIST);
         }
         // 启动事务
         Db::startTrans();

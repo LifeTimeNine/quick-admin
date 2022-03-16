@@ -23,7 +23,7 @@ class Systemuser extends Basic
      */
     public function userInfo()
     {
-        $this->returnMap($this->getSystemUserModel()->visible(['username','avatar','name'])->toArray());
+        $this->returnMap($this->getSystemUserModel()->visible(['username','avatar','name','mobile','email'])->toArray());
     }
     /**
      * 编辑用户信息
@@ -191,7 +191,7 @@ class Systemuser extends Basic
     public function resetPwd()
     {
         $user = SystemUserModel::find($this->request->post('id'));
-        if (empty($user)) $this->error(Code::DATA_EXIST);
+        if (empty($user)) $this->error(Code::DATA_NOT_EXIST);
 
         $user->save([
             'password' => md5($user->username),

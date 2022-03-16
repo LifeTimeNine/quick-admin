@@ -256,7 +256,7 @@ trait QuickAction
         $pk = $pk ?: $model->getPk();
         $data = $model->where($pk, $this->request->get($pk))->find();
         
-        if (empty($data)) $this->error(Code::DATA_EXIST);
+        if (empty($data)) $this->error(Code::DATA_NOT_EXIST);
 
         $this->_callback($filter, 'detail_filter', [&$data]);
 

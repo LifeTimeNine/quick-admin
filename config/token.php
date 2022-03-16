@@ -13,7 +13,7 @@ return [
     'default_expire' => 3600 * 24 * 7,
     // 应用单独设置
     'apps' => [
-        'index' => [
+        'admin' => [
             //  Token有效时间
             'expire' => 3600 * 24 * 7
         ]

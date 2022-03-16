@@ -26,7 +26,7 @@ class Code
     /**
      * 数据不存在
      */
-    const DATA_EXIST = [10003, '数据不存在'];
+    const DATA_NOT_EXIST = [10003, '数据不存在'];
     /**
      * token异常
      */
@@ -42,7 +42,7 @@ class Code
     /**
      * token 失效
      */
-    const TOKEN_FIALURE = [10104, '身份信息已失效'];
+    const TOKEN_FIALURE = [10104, '身份信息已失效请重新登录'];
     /**
      * 用户被禁用
      */
