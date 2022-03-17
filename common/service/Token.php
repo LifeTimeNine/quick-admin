@@ -186,11 +186,19 @@ class Token
             return false;
         }
         // 验证有效性
-        if ($this->data['iat'] < $this->getJtiTime($this->data['jti'])) {
+        if ($this->data['iat'] <> $this->getJtiTime($this->data['jti'])) {
             $this->setError(Code::TOKEN_FIALURE);
             return false;
         }
         return $this->data['data'];
+    }
+    /**
+     * 退出登录
+     * @access  public
+     */
+    public function logout()
+    {
+        $this->clearJti($this->data['jti']);
     }
     /**
      * 获取Token所有数据
@@ -220,5 +228,14 @@ class Token
     protected function getJtiTime(string $jti)
     {
         return $this->app->cache->get("jti_{$jti}");
+    }
+    /**
+     * 清除jti
+     * @access  protected
+     * @param   string  $jti
+     */
+    protected function clearJti(string $jti)
+    {
+        return $this->app->cache->delete("jti_{$jti}");
     }
 }

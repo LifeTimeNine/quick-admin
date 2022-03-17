@@ -58,4 +58,12 @@ class Auth extends Basic
         ]);
         $this->returnMap(Token::instance()->build($user->id, 'login'));
     }
+    /**
+     * 退出登录
+     */
+    public function logout()
+    {
+        Token::instance()->logout();
+        $this->success();
+    }
 }

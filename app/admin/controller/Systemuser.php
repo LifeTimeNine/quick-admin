@@ -33,7 +33,7 @@ class Systemuser extends Basic
         $this->_form(
             SystemUserModel::class,
             SystemUserValidate::class . '.userEdit',
-            ['avatar'],
+            ['avatar','mobile','email'],
             'id',
             function(&$data) {
                 $data['id'] = $this->getSuid();
