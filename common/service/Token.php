@@ -218,7 +218,7 @@ class Token
      */
     protected function setJtiTime(string $jti, int $time)
     {
-        $this->app->cache->set("jti_{$jti}", $time);
+        $this->app->cache->set("jti_{$jti}", $time, $this->appConfig('expire', $this->config('default_expire')));
     }
     /**
      * 获取jti时间
