@@ -38,6 +38,12 @@ class Token
      */
     protected $data;
 
+    /**
+     * 刷新token
+     * @var string
+     */
+    protected $refreshToken;
+
     public function __construct()
     {
         $this->app = app();
@@ -49,28 +55,30 @@ class Token
      * 获取配置
      * @access protected
      * @param   string  $name
+     * @param   mixed   $default
      * @retrurn mixed
      */
-    protected function config($name = null)
+    protected function config(string $name = null, $default = null)
     {
         if (empty($name)) {
-            return $this->app->config->get("token");
+            return $this->app->config->get("token", $default);
         } else {
-            return $this->app->config->get("token.{$name}");
+            return $this->app->config->get("token.{$name}", $default);
         }
     }
     /**
      * 获取应用配置
      * @access  protected
      * @param   string  $name
+     * @param   mixed   $default
      * @return  mixed
      */
-    protected function appConfig($name = null)
+    protected function appConfig(string $name = null, $default = null)
     {
         if (empty($name)) {
-            return $this->config("apps.{$this->appName}");
+            return $this->config("apps.{$this->appName}", $default);
         } else {
-            return $this->config("apps.{$this->appName}.{$name}");
+            return $this->config("apps.{$this->appName}.{$name}", $default);
         }
     }
 
@@ -91,72 +99,24 @@ class Token
             'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'exp' => $time + $this->appConfig('expire', $this->config('default_expire')),
+            'exp' => $time + $this->appConfig('expire', $this->config('default_expire', 3600 * 6)),
             'jti' => $jti,
             'data' => $data
         ];
-        $refreshPaylod = [
-            'iss' => $this->domain,
-            'sub' => $sub,
-            'aud' => $this->appName,
-            'iat' => $time,
-            'nbf' => $time,
-            'jti' => $jti,
-            'data' => $data
-        ];
-        $this->setJtiTime($jti, $time);
-        return [
-            'access_token' => JWT::encode($payload, $this->config('salt')),
-            'expire' => $payload['exp'],
-            'refresh_token' => JWT::encode($refreshPaylod, $this->config('refresh_salt'))
-        ];
+        $this->setJtiTime($jti, $time, $payload['exp']);
+        return JWT::encode($payload, $this->config('salt'));
     }
     /**
      * 刷新Token
-     * @access  public
-     * @param   string      $token      Token
-     * @param   string      $sub        主题
-     * @param   callable    $callable   自定义验证方法
+     * @access  protected
      * @return  array
      */
-    public function refresh(string $token, string $sub, callable $callable = null)
+    protected function refresh()
     {
-        try {
-            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('refresh_salt'), ['HS256'])), true);
-        } catch (\Throwable $th) { //其他异常
-            $this->setError(Code::TOKEN_REFRESH_FAIL);
-            return false;
-        }
-        if (
-            $this->data['iss'] <> $this->domain ||
-            $this->data['sub'] <> $sub ||
-            $this->data['aud'] <> $this->appName
-        ) {
-            $this->setError(Code::TOKEN_REFRESH_FAIL);
-            return false;
-        }
-        if (is_callable($callable)) {
-            $res = call_user_func($callable, $this->data);
-            if ($res !== true) {
-                $this->setError($res);
-                return false;
-            }
-        }
         $time = $this->app->request->time();
-        $payload = [
-            'iss' => $this->domain,
-            'sub' => $sub,
-            'aud' => $this->appName,
-            'iat' => $time,
-            'nbf' => $time,
-            'exp' => $time + $this->appConfig('expire', $this->config('default_expire')),
-            'jti' => $this->data['jti'],
-            'data' => $this->data['data']
-        ];
-        return [
-            'access_token' => JWT::encode($payload, $this->config('salt')),
-            'expire' => $payload['exp'],
-        ];
+        $this->data['exp'] = $time + $this->appConfig('expire', $this->config('default_expire', 3600 * 6));
+        $this->setJtiTime($this->data['jti'], $time, $this->data['exp']);
+        $this->refreshToken = JWT::encode($this->data, $this->config('salt'));
     }
     /**
      * 解析Token
@@ -190,6 +150,10 @@ class Token
             $this->setError(Code::TOKEN_FIALURE);
             return false;
         }
+        // 判断有效期
+        if ($this->config('auto_refresh') && ($this->data['exp'] - time()) < $this->appConfig('expire', $this->config('default_expire')) * $this->config('auto_refresh_time_ratio', 0.1)) {
+            $this->refresh();
+        }
         return $this->data['data'];
     }
     /**
@@ -200,6 +164,7 @@ class Token
     {
         $this->clearJti($this->data['jti']);
     }
+
     /**
      * 获取Token所有数据
      * @access  public
@@ -208,6 +173,16 @@ class Token
     public function getAll()
     {
         return $this->data;
+    }
+
+    /**
+     * 获取刷新token
+     * @access  public
+     * @return  string|null
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
     }
 
     /**

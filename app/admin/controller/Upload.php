@@ -3,9 +3,9 @@
 namespace app\admin\controller;
 
 use service\Storage;
-use think\response\Html;
 use think\response\Json;
 use service\Code;
+use think\Response;
 
 class Upload extends Basic
 {
@@ -31,7 +31,7 @@ class Upload extends Basic
         if ($res !== true) {
             return Json::create(['message' => $res], 'json')->code(400);
         } else {
-            return Html::create();
+            return Response::create();
         }
     }
 
@@ -55,7 +55,6 @@ class Upload extends Basic
     {
         $storage = Storage::instance();
         $options = [];
-        trace($this->request->post('partNumbers'));
         foreach (explode(',', $this->request->post('partNumbers')) as $partNumber) {
             $res = $storage->partOptions($this->request->post('fileName'), $this->request->post('fileMd5'), $this->request->post('uploadId'), (int)$partNumber);
             if ($res === false) {
@@ -74,9 +73,9 @@ class Upload extends Basic
         $storage = Storage::instance();
         $res = $storage->storage('local')->part();
         if (!is_array($res)) {
-            return Html::create($storage->getError(), 'html', 400);
+            return Response::create($storage->getError(), 'html', 400);
         }
-        return Html::create()->header(['ETag' => $res['etag']]);
+        return Response::create()->code(204)->eTag($res['etag']);
     }
 
     /**

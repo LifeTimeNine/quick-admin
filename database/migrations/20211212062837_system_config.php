@@ -7,7 +7,10 @@ class SystemConfig extends Migrator
 {
     public function change()
     {
-        $table = $this->table('system_config', ['id'=>false,'primary_key'=>'key', 'comment'=>'系统配置表','collation'=>'utf8mb4_general_ci'])
+        $table = $this->table('system_config', ['id'=>false,'primary_key'=>'id', 'comment'=>'系统配置表','collation'=>'utf8mb4_general_ci'])
+            ->addColumn(
+                Column::bigInteger('id')->setLimit(20)->setSigned(false)->setNull(false)->setIdentity(true)->setComment('ID')
+            )
             ->addColumn(
                 Column::string('key', 100)->setNull(false)->setComment('键')
             )

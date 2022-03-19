@@ -52,16 +52,16 @@ class SystemErrorLog extends Migrator
                 Column::dateTime('last_happen_time')->setNull(false)->setComment('最后一次发生的时间')
             )
             ->addColumn(
-                Column::integer('happen_num')->setLimit(10)->setSigned(false)->setNull(false)->setDefault(0)->setComment('累计发生次数')
+                Column::integer('happen_num')->setLimit(10)->setSigned(false)->setNull(false)->setDefault(1)->setComment('累计发生次数')
             )
             ->addColumn(
                 Column::boolean('status')->setSigned(false)->setNull(false)->setDefault(1)->setComment('状态')
             )
             ->addColumn(
-                Column::integer('resolve_suid')->setLimit(10)->setSigned(false)->setNull(false)->setComment('处理用户ID')
+                Column::integer('resolve_suid')->setLimit(10)->setSigned(false)->setNull(true)->setComment('处理用户ID')
             )
             ->addColumn(
-                Column::dateTime('resolve_time')->setNull(false)->setComment('处理时间')
+                Column::dateTime('resolve_time')->setNull(true)->setComment('处理时间')
             )
             ->addIndex(
                 (new Index)->setName('hash')->setColumns(['hash'])

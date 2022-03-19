@@ -9,7 +9,7 @@ use basic\Model;
  */
 class SystemConfig extends Model
 {
-    protected $pk = 'key';
+    protected $pk = 'id';
     protected $table = 'system_config';
 
     /**

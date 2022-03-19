@@ -19,6 +19,7 @@ class SystemConfig extends Validate
     protected $message = [
         'key.require' => '请输入配置键',
         'key.max' => '配置键超出最大字数限制',
+        'key.unique' => '配置键已存在',
         'type.require' => '请选择配置类型',
         'type.in' => '配置类型不合法',
         'name.require' => '请输入配置名称',

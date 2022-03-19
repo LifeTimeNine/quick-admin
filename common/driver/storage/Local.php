@@ -144,7 +144,7 @@ class Local extends Driver
         if ($auth <> sha1($uploadId . $partNumber . $uploadId)) {
             return "Authorization 验证失败";
         }
-        $etag = strtoupper(md5($uploadId . $partNumber . time()));
+        $etag = strtoupper(md5($uploadId . $partNumber));
         $tempPath = $this->getConfig('temp_path') ?: $this->app->getRuntimePath() . 'storage' . DIRECTORY_SEPARATOR;
         $tempPath .= $uploadId . DIRECTORY_SEPARATOR;
         if (!is_dir($tempPath)) mkdir($tempPath, 0777, true);

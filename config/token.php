@@ -7,10 +7,12 @@
 return [
     // 加密盐
     'salt' => 'admin_123456',
-    // 刷新 加密盐
-    'refresh_salt' => 'admin_refresh_123456',
     // 默认有效期
     'default_expire' => 3600 * 24 * 7,
+    // 是否自动刷新token
+    'auto_refresh' => true,
+    // 自动刷新token的剩余时间占比
+    'auto_refresh_time_ratio' => 0.1,
     // 应用单独设置
     'apps' => [
         'admin' => [

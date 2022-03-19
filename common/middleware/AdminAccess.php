@@ -15,7 +15,7 @@ use service\Code;
 class AdminAccess extends AccessMiddleware
 {
     protected $white = [
-        'auth' => ['pwd','refresh'],
+        'systemuser' => ['pwdLogin'],
         'systemconfig' => ['basic'],
         'upload' => ['file', 'part']
     ];
@@ -64,7 +64,12 @@ class AdminAccess extends AccessMiddleware
         // 验证用户权限
         if (!Node::instance()->check($uid)) return json(Code::buildMsg(Code::PERMISSION_DENIED));
 
-        return $next($request);
+        /**@var \think\Response */
+        $response = $next($request);
+        if (!empty($refreshToken = $tokenService->getRefreshToken())) {
+            $response->header(['Refresh-Token' => $refreshToken]);
+        }
+        return $response;
     }
 
     public function end(\think\Response $response)

@@ -41,11 +41,12 @@ CREATE TABLE `system_action_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `system_config`;
 CREATE TABLE `system_config`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '键',
   `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
   `type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '类型',
   `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '配置名称',
-  PRIMARY KEY (`key`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -72,7 +73,7 @@ CREATE TABLE `system_error_log`  (
   `error_trace` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '异常跟踪',
   `happen_time` datetime(0) NOT NULL COMMENT '第一次发生的时间',
   `last_happen_time` datetime(0) NOT NULL COMMENT '最后一次发生的时间',
-  `happen_num` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '累计发生次数',
+  `happen_num` int(10) UNSIGNED NOT NULL DEFAULT 1 COMMENT '累计发生次数',
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
   `resolve_suid` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '处理用户ID',
   `resolve_time` datetime(0) NULL DEFAULT NULL COMMENT '处理时间',

@@ -4,8 +4,6 @@ namespace app\admin\controller;
 
 use model\SystemConfig as SystemConfigModel;
 use service\SystemConfig as SystemConfigService;
-use think\facade\Db;
-use service\Code;
 use tools\Query;
 use traits\controller\QuickAction;
 use validate\SystemConfig as SystemConfigValidate;
@@ -28,49 +26,39 @@ class Systemconfig extends Basic
         $query = new Query();
         $query->equal('key')
             ->like('name');
-        $this->_page(SystemConfigModel::class, [], 'key asc');
+        $this->_page(SystemConfigModel::class, $query->parse());
     }
     /**
      * 添加系统配置
      */
     public function add()
     {
-        $data = $this->request->post();
-        $this->validate($data, SystemConfigValidate::class, 'add');
-        // 启动事务
-        Db::startTrans();
-        try {
-            SystemConfigModel::create($data, ['key', 'name', 'type', 'value']);
-            SystemConfigService::instance()->refresh();
-            // 提交事务
-            Db::commit();
-        } catch (\Exception $e) {
-            // 回滚事务
-            Db::rollback();
-            $this->error(Code::ACTION_FAIL);
-        }
-        $this->success();
+        $this->_form(
+            SystemConfigModel::class,
+            SystemConfigValidate::class . '.add',
+            ['key', 'name', 'type', 'value'],
+            null,
+            null,
+            function() {
+                SystemConfigService::instance()->refresh();
+            }
+        );
     }
     /**
      * 编辑系统配置
      */
     public function edit()
     {
-        $data = $this->request->post();
-        $this->validate($data, SystemConfigValidate::class);
-        // 启动事务
-        Db::startTrans();
-        try {
-            SystemConfigModel::update($data, ['key' => $data['key']], ['name', 'type', 'value']);
-            SystemConfigService::instance()->refresh();
-            // 提交事务
-            Db::commit();
-        } catch (\Exception $e) {
-            // 回滚事务
-            Db::rollback();
-            $this->error(Code::ACTION_FAIL);
-        }
-        $this->success();
+        $this->_form(
+            SystemConfigModel::class,
+            SystemConfigValidate::class,
+            ['name', 'type', 'value'],
+            null,
+            null,
+            function() {
+                SystemConfigService::instance()->refresh();
+            }
+        );
     }
     /**
      * 删除系统配置
