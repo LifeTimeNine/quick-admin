@@ -103,14 +103,18 @@ CREATE TABLE `system_menu`  (
 -- ----------------------------
 -- Records of system_menu
 -- ----------------------------
-INSERT INTO `system_menu` VALUES (1, 1, 0, '系统管理', 'el-icon-s-tools', '#', NULL, '', '2022-02-20 17:06:43', 1, NULL);
-INSERT INTO `system_menu` VALUES (2, 8, 1, '系统用户', 'el-icon-user', '/system/user', 'systemuser/list', NULL, '2022-02-20 17:09:06', 1, NULL);
-INSERT INTO `system_menu` VALUES (3, 9, 1, '系统角色', 'el-icon-s-custom', '/system/role', 'systemrole/list', NULL, '2022-02-22 13:02:04', 1, NULL);
-INSERT INTO `system_menu` VALUES (4, 10, 1, '系统菜单', 'nested', '/system/menu', 'systemmenu/list', '', '2022-02-22 16:41:19', 1, NULL);
-INSERT INTO `system_menu` VALUES (5, 0, 1, '操作日志', 'el-icon-tickets', '/system/actionlog', 'systemactionlog/list', NULL, '2022-02-26 14:43:36', 1, NULL);
-INSERT INTO `system_menu` VALUES (6, 0, 1, '异常日志', 'el-icon-warning-outline', '/system/errorlog', 'systemerrorlog/list', NULL, '2022-02-26 19:22:58', 1, NULL);
-INSERT INTO `system_menu` VALUES (7, 0, 1, '系统配置', 'el-icon-setting', '/system/config', 'systemconfig/list', NULL, '2022-02-28 14:14:21', 1, NULL);
-INSERT INTO `system_menu` VALUES (8, 0, 1, '系统任务', 'task', '/system/task', 'systemtask/list', NULL, '2022-03-07 22:01:13', 1, NULL);
+INSERT INTO `system_menu` VALUES (1, 1, 0, '系统管理', 'tools', '#', NULL, NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (2, 8, 1, '系统用户', 'user-filled', '/system/user', 'systemuser/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (3, 9, 1, '系统角色', 'role', '/system/role', 'systemrole/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (4, 10, 1, '系统菜单', 'nested', '/system/menu', 'systemmenu/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (5, 0, 1, '操作日志', 'tickets', '/system/actionlog', 'systemactionlog/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (6, 0, 1, '异常日志', 'warning', '/system/errorlog', 'systemerrorlog/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (7, 0, 1, '系统配置', 'setting', '/system/config', 'systemconfig/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (8, 0, 1, '系统任务', 'task', '/system/task', 'systemtask/list', NULL, '2022-03-14 17:55:24', 1, NULL);
+INSERT INTO `system_menu` VALUES (9, 0, 0, '回收站', 'recycle', '#', NULL, NULL, '2022-03-20 16:09:37', 1, NULL);
+INSERT INTO `system_menu` VALUES (10, 0, 9, '系统用户', 'user-filled', '/recycle/systemUser', 'systemuser/recycleList', NULL, '2022-03-20 16:11:49', 1, NULL);
+INSERT INTO `system_menu` VALUES (11, 0, 9, '系统角色', 'role', '/recycle/systemRole', 'systemrole/recycleList', NULL, '2022-03-20 17:31:46', 1, NULL);
+INSERT INTO `system_menu` VALUES (12, 0, 9, '系统菜单', 'nested', '/recycle/systemMenu', 'systemmenu/recycleList', NULL, '2022-03-20 17:01:11', 1, NULL);
 
 -- ----------------------------
 -- Table structure for system_role
