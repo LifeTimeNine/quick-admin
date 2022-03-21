@@ -36,7 +36,7 @@ class {$class_name} extends Basic
     {
         $query = new Query();
         $this->_page(
-            SystemRoleModel::onlyTrashed(),
+            {$model_name}Model::onlyTrashed(),
             $query->parse(),
             'delete_time desc'
         );
