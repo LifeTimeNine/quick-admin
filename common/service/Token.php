@@ -44,11 +44,18 @@ class Token
      */
     protected $refreshToken;
 
+    /**
+     * token有效期配置
+     * @var int
+     */
+    protected $expire;
+
     public function __construct()
     {
         $this->app = app();
         $this->appName = $this->app->http->getName();
         $this->domain = $this->app->request->domain();
+        $this->expire = $this->appConfig('expire', $this->config('default_expire', 3600 * 6));
     }
 
     /**
@@ -92,18 +99,17 @@ class Token
     public function build($data, string $sub = null)
     {
         $time = $this->app->request->time();
-        $jti = sha1("{$this->domain}{$this->appName}{$sub}" . serialize($data));
         $payload = [
             'iss' => $this->domain,
             'sub' => $sub,
             'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'exp' => $time + $this->appConfig('expire', $this->config('default_expire', 3600 * 6)),
-            'jti' => $jti,
+            'exp' => $time + $this->expire,
+            'jti' => sha1("{$this->domain}{$this->appName}{$sub}" . serialize($data) . time()),
             'data' => $data
         ];
-        $this->setJtiTime($jti, $time, $payload['exp']);
+        $this->app->cache->set("jti_{$payload['jti']}", ['has_refresh' => false], $this->expire);
         return JWT::encode($payload, $this->config('salt'));
     }
     /**
@@ -114,8 +120,10 @@ class Token
     protected function refresh()
     {
         $time = $this->app->request->time();
-        $this->data['exp'] = $time + $this->appConfig('expire', $this->config('default_expire', 3600 * 6));
-        $this->setJtiTime($this->data['jti'], $time, $this->data['exp']);
+        $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => true], 300);
+        $this->data['exp'] = $time + $this->expire;
+        $this->data['jti'] = sha1("{$this->domain}{$this->appName}{$this->data['sub']}" . serialize($this->data['data']) . time());
+        $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => false], $this->expire);
         $this->refreshToken = JWT::encode($this->data, $this->config('salt'));
     }
     /**
@@ -146,12 +154,12 @@ class Token
             return false;
         }
         // 验证有效性
-        if ($this->data['iat'] <> $this->getJtiTime($this->data['jti'])) {
+        if (empty($jtiData = $this->app->cache->get("jti_{$this->data['jti']}"))) {
             $this->setError(Code::TOKEN_FIALURE);
             return false;
         }
         // 判断有效期
-        if ($this->config('auto_refresh') && ($this->data['exp'] - time()) < $this->appConfig('expire', $this->config('default_expire')) * $this->config('auto_refresh_time_ratio', 0.1)) {
+        if ($this->config('auto_refresh') && !$jtiData['has_refresh'] && ($this->data['exp'] - time()) < $this->appConfig('expire', $this->config('default_expire')) * $this->config('auto_refresh_time_ratio', 0.1)) {
             $this->refresh();
         }
         return $this->data['data'];
@@ -162,7 +170,7 @@ class Token
      */
     public function logout()
     {
-        $this->clearJti($this->data['jti']);
+        $this->app->cache->delete("jti_{$this->data['jti']}");
     }
 
     /**
@@ -183,34 +191,5 @@ class Token
     public function getRefreshToken()
     {
         return $this->refreshToken;
-    }
-
-    /**
-     * 设置jti时间
-     * @access  protected
-     * @param   string  $jti
-     * @param   int     $time
-     */
-    protected function setJtiTime(string $jti, int $time)
-    {
-        $this->app->cache->set("jti_{$jti}", $time, $this->appConfig('expire', $this->config('default_expire')));
-    }
-    /**
-     * 获取jti时间
-     * @access  protected
-     * @return  int
-     */
-    protected function getJtiTime(string $jti)
-    {
-        return $this->app->cache->get("jti_{$jti}");
-    }
-    /**
-     * 清除jti
-     * @access  protected
-     * @param   string  $jti
-     */
-    protected function clearJti(string $jti)
-    {
-        return $this->app->cache->delete("jti_{$jti}");
     }
 }
