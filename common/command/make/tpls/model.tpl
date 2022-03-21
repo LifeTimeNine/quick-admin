@@ -7,8 +7,7 @@ use basic\Model;
 {/if}
 
 /**
- * {$title}
-
+ * {$title}模型
  */
 class {$class_name} extends Model
 {
