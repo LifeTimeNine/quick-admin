@@ -34,6 +34,19 @@ class Systemmenu extends Basic
         $this->returnList($list);
     }
     /**
+     * 系统菜单回收站列表
+     * @menu    true
+     * @auth    true
+     */
+    public function recycleList()
+    {
+        $this->_page(
+            SystemMenuModel::onlyTrashed(),
+            null,
+            'delete_time desc',
+        );
+    }
+    /**
      * 添加系统菜单
      * @auth    true
      * @log     true

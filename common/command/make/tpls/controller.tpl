@@ -28,6 +28,20 @@ class {$class_name} extends Basic
         );
     }
     /**
+     * {$title}回收站列表
+     * @menu    true
+     * @auth    true
+     */
+    public function recycleList()
+    {
+        $query = new Query();
+        $this->_page(
+            SystemRoleModel::onlyTrashed(),
+            $query->parse(),
+            'delete_time desc'
+        );
+    }
+    /**
      * 添加{$title}
 
      * @auth    true

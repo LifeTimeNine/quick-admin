@@ -58,13 +58,15 @@ trait QuickAction
      * @param   callable                                $filter     过滤器
      * @throws  \think\exception\HttpResponseException
      */
-    protected function _page($model,$condition = [], $order = null, callable $filter = null)
+    protected function _page($model, $condition = [], $order = null, callable $filter = null)
     {
-        if (is_array($condition)) {
-        } elseif($condition instanceof Where) {
-            $condition = $condition->parse();
-        } else {
-            throw new Exception('Condition type is incorrect');
+        if (!empty($condition)) {
+            if (is_array($condition)) {
+            } elseif($condition instanceof Where) {
+                $condition = $condition->parse();
+            } else {
+                throw new Exception('Condition type is incorrect');
+            }
         }
 
         if (is_string($model)) {

@@ -135,16 +135,44 @@ class Systemuser extends Basic
         $query->like('username,name')
             ->equal('status')
             ->append('id', '<>', 1);
-        $model = SystemUserModel::with([
-            'roles'
-        ])
-            ->where($query->parse())
-            ->visible([
-                'id','username','avatar','name','desc','create_time',
-                'status','last_login_time','last_login_ip','login_num',
-                'roles'=>['id', 'name']
-            ]);
-        $this->_page($model);
+        $this->_page(
+            SystemUserModel::class,
+            $query->parse(),
+            null,
+            function($data) {
+                $data->load(['roles'])
+                    ->visible([
+                        'id','username','avatar','name','desc','create_time',
+                        'status','last_login_time','last_login_ip','login_num',
+                        'roles'=>['id', 'name']
+                    ]);
+            }
+        );
+    }
+    /**
+     * 系统用户回收站列表
+     * @menu    true
+     * @auth    true
+     */
+    public function recycleList()
+    {
+        $query = new Query();
+        $query->like('username,name')
+            ->equal('status')
+            ->append('id', '<>', 1);
+        $this->_page(
+            SystemUserModel::onlyTrashed(),
+            $query->parse(),
+            'delete_time desc',
+            function($data) {
+                $data->load(['roles'])
+                    ->visible([
+                        'id','username','avatar','name','desc','create_time',
+                        'status','last_login_time','last_login_ip','login_num',
+                        'roles'=>['id', 'name']
+                    ]);
+            }
+        );
     }
     /**
      * 创建系统用户

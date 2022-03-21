@@ -27,12 +27,38 @@ class Systemrole extends Basic
     {
         $query = new Query();
         $query->append('id', '<>', 1)
-            // ->append('create_suid', '=', $this->getSuid())
+            ->append('create_suid', '=', $this->getSuid())
             ->like('name')
             ->equal('status');
-        $model = SystemRoleModel::where($query->parse())
-            ->hidden(['create_suid', 'delete_time']);
-        $this->_page($model);
+        $this->_page(
+            SystemRoleModel::class,
+            $query->parse(),
+            null,
+            function($data) {
+                $data->hidden(['create_suid', 'delete_time']);
+            }
+        );
+    }
+    /**
+     * 系统角色回收站列表
+     * @menu    true
+     * @auth    true
+     */
+    public function recycleList()
+    {
+        $query = new Query();
+        $query->append('id', '<>', 1)
+            ->append('create_suid', '=', $this->getSuid())
+            ->like('name')
+            ->equal('status');
+        $this->_page(
+            SystemRoleModel::onlyTrashed(),
+            $query->parse(),
+            'delete_time desc',
+            function($data) {
+                $data->hidden(['create_suid', 'delete_time']);
+            }
+        );
     }
     /**
      * 添加系统角色
