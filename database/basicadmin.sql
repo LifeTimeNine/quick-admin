@@ -52,7 +52,7 @@ CREATE TABLE `system_config`  (
 -- ----------------------------
 -- Records of system_config
 -- ----------------------------
-INSERT INTO `system_config` VALUES ('system_name', 'BasicAdmin', 1, '系统名称');
+INSERT INTO `system_config` VALUES ('system_name', 'QuickAdmin', 1, '系统名称');
 
 -- ----------------------------
 -- Table structure for system_error_log

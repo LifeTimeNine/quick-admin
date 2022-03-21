@@ -27,7 +27,7 @@ class SystemConfig extends Migrator
         
         $table->insert([
             'key' => 'system_name',
-            'value' => 'BasicAdmin',
+            'value' => 'QuickAdmin',
             'type' => 1,
             'name' => '系统名称'
         ]);
