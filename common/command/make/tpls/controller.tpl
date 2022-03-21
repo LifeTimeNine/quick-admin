@@ -64,7 +64,8 @@ class {$class_name} extends Basic
         $this->_detail({$model_name}Model::class);
     }
     /**
-     * {$title}角色
+     * 编辑{$title}
+
      * @auth    true
      * @log     true
      */
@@ -73,7 +74,7 @@ class {$class_name} extends Basic
         $this->_form(
             {$model_name}Model::class,
             {$validate_name}Validate::class . '.edit',
-            [],
+            []
         );
     }
     /**
