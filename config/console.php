@@ -9,5 +9,6 @@ return [
         \command\make\Model::class,
         \command\make\Controller::class,
         \command\make\Validate::class,
+        \command\backup\Db::class,
     ],
 ];

@@ -3,6 +3,7 @@
 namespace validate;
 
 use basic\Validate;
+use model\SystemUser as SystemUserModel;
 
 /**
  * 系统用户验证器
@@ -29,7 +30,9 @@ class SystemUser extends Validate
         'name.max' => '用户姓名超出最大字数限制',
         'desc.max' => '用户描述超出最大字数限制',
         'mobile.mobile' => '手机号格式不正确',
+        'mobile.unique' => '当前手机号已被使用',
         'email.email' => '邮箱格式不正确',
+        'email.unique' => '当前邮箱已被使用',
         'srids.require' => '请选择用户角色',
         'srids.array' => '用户角色列表格式不正确',
     ];
@@ -59,6 +62,8 @@ class SystemUser extends Validate
      */
     protected function sceneUserEdit()
     {
-        return $this->only(['avatar','mobile','email']);
+        return $this->only(['avatar','mobile','email'])
+            ->append('mobile', 'unique:'. SystemUserModel::class)
+            ->append('email', 'unique:' . SystemUserModel::class);
     }
 }
