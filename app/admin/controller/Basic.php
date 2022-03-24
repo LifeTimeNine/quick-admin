@@ -4,7 +4,6 @@ namespace app\admin\controller;
 
 use basic\Controller;
 use middleware\AdminAccess;
-use middleware\Cors;
 
 /**
  * 控制器基类

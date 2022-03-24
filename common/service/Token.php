@@ -45,17 +45,31 @@ class Token
     protected $refreshToken;
 
     /**
-     * token有效期配置
-     * @var int
+     * 加密盐
+     * @var string
      */
-    protected $expire;
+    protected $salt = 'QuickAdmin';
+
+    /**
+     * 配置
+     * @var array
+     */
+    protected $config = [
+        //  Token有效时间
+        'expire' => 3600 * 24 * 3,
+        // 是否自动刷新token
+        'auto_refresh' => true,
+        // 自动刷新token的剩余时间占比
+        'auto_refresh_time_ratio' => 0.1,
+    ];
 
     public function __construct()
     {
         $this->app = app();
         $this->appName = $this->app->http->getName();
         $this->domain = $this->app->request->domain();
-        $this->expire = $this->appConfig('expire', $this->config('default_expire', 3600 * 6));
+        $this->salt = $this->app->config->get('token.salt', $this->salt);
+        $this->config = array_merge($this->config, $this->app->config->get("token.apps.{$this->appName}", []));
     }
 
     /**
@@ -68,24 +82,9 @@ class Token
     protected function config(string $name = null, $default = null)
     {
         if (empty($name)) {
-            return $this->app->config->get("token", $default);
+            return $this->config;
         } else {
-            return $this->app->config->get("token.{$name}", $default);
-        }
-    }
-    /**
-     * 获取应用配置
-     * @access  protected
-     * @param   string  $name
-     * @param   mixed   $default
-     * @return  mixed
-     */
-    protected function appConfig(string $name = null, $default = null)
-    {
-        if (empty($name)) {
-            return $this->config("apps.{$this->appName}", $default);
-        } else {
-            return $this->config("apps.{$this->appName}.{$name}", $default);
+            return $this->config[$name] ?? $default;
         }
     }
 
@@ -105,12 +104,12 @@ class Token
             'aud' => $this->appName,
             'iat' => $time,
             'nbf' => $time,
-            'exp' => $time + $this->expire,
+            'exp' => $time + $this->config('expire'),
             'jti' => sha1("{$this->domain}{$this->appName}{$sub}" . serialize($data) . time()),
             'data' => $data
         ];
-        $this->app->cache->set("jti_{$payload['jti']}", ['has_refresh' => false], $this->expire);
-        return JWT::encode($payload, $this->config('salt'));
+        $this->app->cache->set("jti_{$payload['jti']}", ['has_refresh' => false], $this->config('expire'));
+        return JWT::encode($payload, $this->salt);
     }
     /**
      * 刷新Token
@@ -121,10 +120,10 @@ class Token
     {
         $time = $this->app->request->time();
         $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => true], 300);
-        $this->data['exp'] = $time + $this->expire;
+        $this->data['exp'] = $time + $this->config('expire');
         $this->data['jti'] = sha1("{$this->domain}{$this->appName}{$this->data['sub']}" . serialize($this->data['data']) . time());
-        $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => false], $this->expire);
-        $this->refreshToken = JWT::encode($this->data, $this->config('salt'));
+        $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => false], $this->config('expire'));
+        $this->refreshToken = JWT::encode($this->data, $this->salt);
     }
     /**
      * 解析Token
@@ -136,7 +135,7 @@ class Token
     public function parse(string $token, string $sub = null)
     {
         try {
-            $this->data = json_decode(json_encode(JWT::decode($token, $this->config('salt'), ['HS256'])), true);
+            $this->data = json_decode(json_encode(JWT::decode($token, $this->salt, ['HS256'])), true);
         } catch(ExpiredException $e) { // token过期
             $this->setError(Code::TOKEN_EXPIRE);
             return false;
@@ -159,7 +158,7 @@ class Token
             return false;
         }
         // 判断有效期
-        if ($this->config('auto_refresh') && !$jtiData['has_refresh'] && ($this->data['exp'] - time()) < $this->appConfig('expire', $this->config('default_expire')) * $this->config('auto_refresh_time_ratio', 0.1)) {
+        if ($this->config('auto_refresh') && !$jtiData['has_refresh'] && ($this->data['exp'] - time()) < $this->config('expire') * $this->config('auto_refresh_time_ratio')) {
             $this->refresh();
         }
         return $this->data['data'];
