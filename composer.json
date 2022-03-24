@@ -2,6 +2,7 @@
     "name": "lifetime/quick-admin",
     "description": "Thinkphp6 based management background",
     "type": "project",
+    "version": "1.0.0",
     "keywords": [
         "Quick",
         "Admin"
