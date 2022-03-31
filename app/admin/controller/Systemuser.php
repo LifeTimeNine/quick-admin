@@ -134,7 +134,8 @@ class Systemuser extends Basic
         $query = new Query();
         $query->like('username,name')
             ->equal('status')
-            ->append('id', '<>', 1);
+            ->append('id', '<>', 1)
+            ->append('id', '<>', $this->getSuid());
         $this->_page(
             SystemUserModel::class,
             $query->parse(),
