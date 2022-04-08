@@ -46,7 +46,7 @@ class Code
     /**
      * 用户被禁用
      */
-    const USER_DISABLE = [10201, '账户已被禁用，请联系管理员'];
+    const USER_DISABLE = [10201, '账户已被禁用'];
     /**
      * 用户被登录
      */
