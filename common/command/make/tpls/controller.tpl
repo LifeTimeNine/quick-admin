@@ -57,7 +57,6 @@ class {$class_name} extends Basic
     }
     /**
      * {$title}详情
-     * @auth    true
      */
     public function detail()
     {

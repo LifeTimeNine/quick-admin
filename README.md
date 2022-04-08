@@ -15,7 +15,7 @@ composer create-project lifetime/quick-admin
 
 从仓库拉取代码
 ~~~
-git clone https://github.com/LifeTimeNine/quick-admin-backstage.git
+git clone https://github.com/LifeTimeNine/quick-admin-backstage.git -b v1
 ~~~
 
 进入项目目录
@@ -23,12 +23,12 @@ git clone https://github.com/LifeTimeNine/quick-admin-backstage.git
 cd quick-admin-backstage
 ~~~
 
-查看所有标签
+安装依赖
 ~~~
-git tag
+npm install
 ~~~
 
-切换至最新标签
+运行
 ~~~
-git checkout vx.x.x
+npm run dev
 ~~~
