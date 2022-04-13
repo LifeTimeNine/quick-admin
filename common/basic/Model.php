@@ -2,20 +2,20 @@
 
 namespace basic;
 
+use traits\model\Tools;
+
 /**
  * 模型基类
- * @package basic
  */
 abstract class Model extends \think\Model
 {
-    /**
-     * 获取数据表名
-     * @access public
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        $db = (new static)->db();
-        return $db->getConfig('database') . '.' . $db->getTable();
-    }
+    use Tools;
+
+    protected $pk = 'id';
+
+    protected $autoWriteTimestamp = 'datetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = false;
+
+    protected $jsonAssoc = true;
 }

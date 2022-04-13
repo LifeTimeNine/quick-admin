@@ -15,6 +15,8 @@ class Model extends Basic
         parent::configure();
         $this->setName('make:model')
             ->addOption('softDelete', 's', Option::VALUE_NONE, 'Enable model soft deletion')
+            ->addOption('pivot', 'p', Option::VALUE_NONE, 'Is it an intermediate table model')
+            ->addOption('json', 'j', Option::VALUE_OPTIONAL, 'JSON field list')
             ->setDescription('Create a new model class');
     }
 
@@ -36,9 +38,17 @@ class Model extends Basic
      */
     protected function getVariable(string $name): array
     {
+        if (!empty($this->input->getOption('json'))) {
+            $jsonField = explode(',', $this->input->getOption('json'));
+            foreach ($jsonField as &$item) $item = "'{$item}'";
+        } else {
+            $jsonField = [];
+        }
         return [
             'table_name' => Str::snake($name),
-            'has_soft_delete' => $this->input->hasOption('softDelete')
+            'has_soft_delete' => $this->input->hasOption('softDelete'),
+            'is_pivot' => $this->input->hasOption('pivot'),
+            'json_field' => $jsonField
         ];
     }
 

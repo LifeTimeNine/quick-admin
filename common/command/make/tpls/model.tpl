@@ -1,22 +1,22 @@
+
 declare (strict_types = 1);
 
 namespace {$namespace};
 
-use basic\Model;
+use basic\{if $is_pivot}Pivot{else/}Model{/if};
 {if $has_soft_delete}use think\model\concern\SoftDelete;
 {/if}
 
 /**
  * {$title}模型
  */
-class {$class_name} extends Model
+class {$class_name} extends {if $is_pivot}Pivot{else/}Model{/if}
 {
-    protected $pk = 'id';
     protected $table = '{$table_name}';
+{if !empty($json_field)}
 
-    protected $autoWriteTimestamp = 'datetime';
-    protected $createTime = 'create_time';
-    protected $updateTime = false;
+    protected $json = [{:implode(',', $json_field)}];
+{/if}
 {if $has_soft_delete}
 
     use SoftDelete;
