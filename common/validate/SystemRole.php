@@ -2,6 +2,7 @@
 
 namespace validate;
 
+use lang\Variable;
 use basic\Validate;
 
 /**
@@ -9,6 +10,8 @@ use basic\Validate;
  */
 class SystemRole extends Validate
 {
+    protected $model = \model\SystemRole::class;
+
     protected $rule = [
         'id' => 'require',
         'name' => 'require|max:64',
@@ -16,10 +19,10 @@ class SystemRole extends Validate
     ];
 
     protected $message = [
-        'id.require' => '请输入系统角色ID',
-        'name.require' => '请输入名称',
-        'name.max' => '名称超出最大字数限制',
-        'desc.max' => '描述超出最大字数限制',
+        'id.require' => Variable::REQUIRED,
+        'name.require' => Variable::REQUIRED,
+        'name.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'desc.max' => Variable::MAXIMUN_WORD_LIMIT,
     ];
 
     /**

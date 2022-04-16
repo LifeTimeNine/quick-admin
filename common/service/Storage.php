@@ -4,6 +4,8 @@ declare (strict_types = 1);
 
 namespace service;
 
+use lang\Variable;
+use think\facade\Lang;
 use think\helper\Arr;
 use think\Manager;
 use traits\tools\Error;
@@ -112,7 +114,7 @@ class Storage extends Manager
     public function info(string $fileName, string $fileMd5)
     {
         if (!$this->checkExt($fileName)) {
-            $this->setError('不允许上传此类文件');
+            $this->setError(Lang::get(Variable::FILE_TYPE_NOT_ALLOWED));
             return false;
         }
         $options = [
@@ -136,7 +138,7 @@ class Storage extends Manager
     public function partInfo(string $fileName, string $fileMd5)
     {
         if (!$this->checkExt($fileName)) {
-            $this->setError('不允许上传此类文件');
+            $this->setError(Lang::get(Variable::FILE_TYPE_NOT_ALLOWED));
             return false;
         }
         $options = [

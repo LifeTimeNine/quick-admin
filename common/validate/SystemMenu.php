@@ -3,12 +3,14 @@
 namespace validate;
 
 use basic\Validate;
+use lang\Variable;
 
 /**
  * 系统菜验证器
  */
 class SystemMenu extends Validate
 {
+    protected $model = \model\SystemMenu::class;
     protected $rule = [
         'id' => 'require',
         'pid' => 'require',
@@ -20,15 +22,15 @@ class SystemMenu extends Validate
     ];
 
     protected  $message = [
-        'id.require' => '请输入系统菜单ID',
-        'pid.require' => '请选择父级菜单',
-        'title.require' => '请输入标题',
-        'title.max' => '标题超出最大字数限制',
-        'icon.max' => '图标超出最大字数限制',
-        'url.require' => '请输入页面地址',
-        'url.max' => '页面地址超出最大字数限制',
-        'node' => '访问节点超出最大字数限制',
-        'params' => '参数超出最大字数限制',
+        'id.require' => Variable::REQUIRED,
+        'pid.require' => Variable::REQUIRED,
+        'title.require' => Variable::REQUIRED,
+        'title.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'icon.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'url.require' => Variable::REQUIRED,
+        'url.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'node.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'params.max' => Variable::MAXIMUN_WORD_LIMIT,
     ];
 
     /**

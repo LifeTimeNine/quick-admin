@@ -10,6 +10,11 @@ use think\exception\ClassNotFoundException;
 class Validate extends \think\Validate
 {
     /**
+     * 当前验证器关联的模型名称
+     * @var string
+     */
+    protected $model;
+    /**
      * 模型默认命名空间
      * @var string
      */
@@ -20,6 +25,21 @@ class Validate extends \think\Validate
      * @var string
      */
     protected $validateNamespace = 'validate';
+
+    /**
+     * 构造方法
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        if (!empty($this->model)) {
+            $model = new $this->model;
+            if ($this->lang->has($model->getTable())) {
+                $this->field = $this->lang->get($model->getTable());
+            }
+        }
+    }
+
 
     /**
      * 验证模型是否存在某条记录

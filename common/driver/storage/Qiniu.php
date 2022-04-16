@@ -2,7 +2,9 @@
 
 namespace driver\storage;
 
+use lang\Variable;
 use service\qiniu\storage\Objects;
+use think\facade\Lang;
 
 /**
  * 七牛云存储
@@ -101,7 +103,7 @@ class Qiniu extends Driver
         try {
             $res = $this->getObject()->completePart('', "{$dir}/{$name}.{$ext}", $uploadId, $partsArr);
         } catch (\Throwable $th) {
-            return '文件合并失败' . $th->getMessage();
+            return Lang::get(Variable::FILE_COMPLETE_FAil);
         }
         return true;
     }

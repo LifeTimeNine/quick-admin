@@ -1,7 +1,9 @@
 <?php
 
 use middleware\Cors;
+use think\middleware\LoadLangPack;
 
 return [
-    Cors::class
+    Cors::class,
+    LoadLangPack::class
 ];

@@ -2,6 +2,9 @@
 
 namespace service;
 
+use lang\Variable;
+use think\facade\Lang;
+
 /**
  * 异常码集合
  */
@@ -10,51 +13,51 @@ class Code
     /**
      * 正常
      */
-    const SUCCESS = [0, 'SUCCESS'];
+    const SUCCESS = [0, Variable::SUCCESS];
     /**
      * 失败
      */
-    const ERROR = [10000, 'ERROR'];
+    const ERROR = [10000, Variable::ERROR];
     /**
      * 参数异常
      */
-    const PARAM_ERROR = [10001, '参数异常'];
+    const PARAM_ERROR = [10001, Variable::PARAM_ERROR];
     /**
      * 操作失败
      */
-    const ACTION_FAIL = [10002, '操作失败'];
+    const ACTION_FAIL = [10002, Variable::ACTION_FAIL];
     /**
      * 数据不存在
      */
-    const DATA_NOT_EXIST = [10003, '数据不存在'];
+    const DATA_NOT_EXIST = [10003, Variable::DATA_NOT_EXIST];
     /**
      * token异常
      */
-    const TOKEN_ERROR = [10101, '身份信息验证失败请重新登录'];
+    const TOKEN_ERROR = [10101, Variable::TOKEN_ERROR];
     /**
      * token 过期
      */
-    const TOKEN_EXPIRE = [10102, '身份信息已过期请重新登录'];
+    const TOKEN_EXPIRE = [10102, Variable::TOKEN_EXPIRE];
     /**
      * token 刷新失败
      */
-    const TOKEN_REFRESH_FAIL = [10103, '身份信息刷新失败'];
+    const TOKEN_REFRESH_FAIL = [10103, Variable::TOKEN_REFRESH_FAIL];
     /**
      * token 失效
      */
-    const TOKEN_FIALURE = [10104, '身份信息已失效请重新登录'];
+    const TOKEN_FIALURE = [10104, Variable::TOKEN_FIALURE];
     /**
      * 用户被禁用
      */
-    const USER_DISABLE = [10201, '账户已被禁用'];
+    const USER_DISABLE = [10201, Variable::USER_DISABLE];
     /**
      * 用户被登录
      */
-    const USER_LOGIN = [10202, '该账户已在其他地点被登录'];
+    const USER_LOGIN = [10202, Variable::USER_LOGIN];
     /**
      * 权限不足
      */
-    const PERMISSION_DENIED = [10203, '权限不足，无法访问此功能'];
+    const PERMISSION_DENIED = [10203, Variable::PERMISSION_DENIED];
 
     /**
      * 构建返回数据
@@ -69,13 +72,13 @@ class Code
         if (is_array($code)) {
             return [
                 'code' => $code[0],
-                'message' => $message ?: ($code[1] ?? self::ERROR[1]),
+                'message' => Lang::get($message ?: ($code[1] ?? self::ERROR[1])),
                 'data' => $data,
             ];
         } else {
             return [
                 'code' => $code,
-                'message' => $message,
+                'message' => Lang::get($message),
                 'data' => $data,
             ];
         }

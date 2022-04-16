@@ -4,6 +4,8 @@ declare (strict_types = 1);
 
 namespace driver\storage;
 
+use lang\Variable;
+use think\facade\Lang;
 use think\facade\Route;
 use tools\Tools;
 
@@ -77,7 +79,7 @@ class Local extends Driver
         if (empty($cacheData = $this->app->cache->get("{$this->cachePrefix}{$token}"))) return 'Token 验证失败';
         /** @var \think\File $file */
         $file = $this->app->request->file($this->fileKey);
-        if (empty($file)) return '文件不存在';
+        if (empty($file)) return Lang::get(Variable::FILE_NOT_EXIST);
         
         [$dir, $name, $ext] = $this->getPathInfo($cacheData['file_name'], $token);
         

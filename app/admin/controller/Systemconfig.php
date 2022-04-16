@@ -51,7 +51,7 @@ class Systemconfig extends Basic
     {
         $this->_form(
             SystemConfigModel::class,
-            SystemConfigValidate::class,
+            SystemConfigValidate::class . '.edit',
             ['name', 'type', 'value'],
             null,
             null,

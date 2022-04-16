@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use lang\Variable;
 use model\SystemMenu;
 use model\SystemUser as SystemUserModel;
 use model\SystemUserRole;
@@ -27,7 +28,7 @@ class Systemuser extends Basic
         $username = $this->request->post('username');
         $password = $this->request->post('password');
         if (empty($username) || empty($password)) {
-            $this->error(Code::PARAM_ERROR, '用户名或密码不存在');
+            $this->error(Code::PARAM_ERROR, 'username or password not correct');
         }
 
         $user = SystemUserModel::where('username', $username)
@@ -35,7 +36,7 @@ class Systemuser extends Basic
             ->whereOr('email', $username)
             ->find();
         if (empty($user) || $user->password <> $password) {
-            $this->error(Code::PARAM_ERROR, '用户名或密码不存在');
+            $this->error(Code::PARAM_ERROR, 'username or password not correct');
         }
         if ($user->status <> 1) {
             $this->error(Code::USER_DISABLE);
@@ -115,10 +116,10 @@ class Systemuser extends Basic
     public function modifyPwd()
     {
         if ($this->request->post('old_password') <> $this->getSystemUserModel()->password) {
-            $this->error(Code::PARAM_ERROR, '原密码不正确');
+            $this->error(Code::PARAM_ERROR, Variable::OLD_PASSWORD_NOT_CORRECT);
         }
         if ($this->request->post('new_password') <> $this->request->post('confirm_password')) {
-            $this->error(Code::PARAM_ERROR, '两次输入的密码不一致');
+            $this->error(Code::PARAM_ERROR, Variable::ENTERRED_PASSWORDS_DIFFER);
         }
         $this->getSystemUserModel()->save(['password' => $this->request->post('new_password')]);
         $this->success();

@@ -3,6 +3,7 @@
 namespace validate;
 
 use basic\Validate;
+use lang\Variable;
 use model\SystemUser as SystemUserModel;
 
 /**
@@ -10,6 +11,7 @@ use model\SystemUser as SystemUserModel;
  */
 class SystemUser extends Validate
 {
+    protected $model = \model\SystemUser::class;
     protected $rule = [
         'id' => 'require',
         'username' => 'require|max:64',
@@ -21,20 +23,20 @@ class SystemUser extends Validate
         'rids' => 'require|array',
     ];
     protected $message = [
-        'id.require' => '请输入系统用户ID',
-        'username.require' => '请输入用户名',
-        'username.max' => '用户名超出最大字数限制',
-        'avatar.reuqire' => '请选择头像',
-        'avatar.url' => '头像地址不正确',
-        'name.require' => '请输入用户姓名',
-        'name.max' => '用户姓名超出最大字数限制',
-        'desc.max' => '用户描述超出最大字数限制',
-        'mobile.mobile' => '手机号格式不正确',
-        'mobile.unique' => '当前手机号已被使用',
-        'email.email' => '邮箱格式不正确',
-        'email.unique' => '当前邮箱已被使用',
-        'srids.require' => '请选择用户角色',
-        'srids.array' => '用户角色列表格式不正确',
+        'id.require' => Variable::REQUIRED,
+        'username.require' => Variable::REQUIRED,
+        'username.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'avatar.reuqire' => Variable::REQUIRED,
+        'avatar.url' => Variable::URL_NOT_CORRECT,
+        'name.require' => Variable::REQUIRED,
+        'name.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'desc.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'mobile.mobile' => Variable::FORMAT_CORRECT,
+        'mobile.unique' => Variable::HAS_EXIST,
+        'email.email' => Variable::FORMAT_CORRECT,
+        'email.unique' => Variable::HAS_EXIST,
+        'srids.require' => Variable::REQUIRED,
+        'srids.array' => Variable::FORMAT_CORRECT,
     ];
 
     /**
