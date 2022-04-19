@@ -1,3 +1,9 @@
+-- MySQL dump 10.13  Distrib 5.7.37, for Linux (x86_64)
+--
+-- Host: 39.107.104.29    Database: quick-admin
+-- ------------------------------------------------------
+-- Server version	5.7.27-log
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -29,17 +35,8 @@ CREATE TABLE `system_action_log` (
   PRIMARY KEY (`id`),
   KEY `suid` (`suid`),
   KEY `node` (`node`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='系统操作记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COMMENT='系统操作记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `system_action_log`
---
-
-LOCK TABLES `system_action_log` WRITE;
-/*!40000 ALTER TABLE `system_action_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_action_log` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `system_config`
@@ -64,7 +61,7 @@ CREATE TABLE `system_config` (
 
 LOCK TABLES `system_config` WRITE;
 /*!40000 ALTER TABLE `system_config` DISABLE KEYS */;
-INSERT INTO `system_config` VALUES (1,'system_name','QuickAdmin',1,'系统名称'),(2,'test','{\"key1\":\"value\"}',3,'1'),(3,'test1','[\"1\",\"1\"]',2,'test');
+INSERT INTO `system_config` VALUES (1,'system_name','QuickAdmin',1,'系统名称'),(2,'test','{\"key1\":\"value\"}',3,'1');
 /*!40000 ALTER TABLE `system_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,14 +96,6 @@ CREATE TABLE `system_error_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='系统异记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `system_error_log`
---
-
-LOCK TABLES `system_error_log` WRITE;
-/*!40000 ALTER TABLE `system_error_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_error_log` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `system_menu`
@@ -137,7 +126,7 @@ CREATE TABLE `system_menu` (
 
 LOCK TABLES `system_menu` WRITE;
 /*!40000 ALTER TABLE `system_menu` DISABLE KEYS */;
-INSERT INTO `system_menu` VALUES (1,1,0,'系统管理','tools','#',NULL,NULL,'2022-03-14 17:55:24',1,NULL),(2,8,1,'系统用户','user-filled','/system/user','systemuser/list',NULL,'2022-03-14 17:55:24',1,NULL),(3,9,1,'系统角色','role','/system/role','systemrole/list',NULL,'2022-03-14 17:55:24',1,NULL),(4,10,1,'系统菜单','nested','/system/menu','systemmenu/list',NULL,'2022-03-14 17:55:24',1,NULL),(5,0,1,'操作日志','tickets','/system/actionlog','systemactionlog/list',NULL,'2022-03-14 17:55:24',1,NULL),(6,0,1,'异常日志','warning','/system/errorlog','systemerrorlog/list',NULL,'2022-03-14 17:55:24',1,NULL),(7,0,1,'系统配置','setting','/system/config','systemconfig/list',NULL,'2022-03-14 17:55:24',1,NULL),(8,0,1,'系统任务','task','/system/task','systemtask/list',NULL,'2022-03-14 17:55:24',1,NULL),(9,0,0,'回收站','recycle','#',NULL,NULL,'2022-03-20 16:09:37',1,NULL),(10,0,9,'系统用户','user-filled','/recycle/systemUser','systemuser/recycleList',NULL,'2022-03-20 16:11:49',1,NULL),(11,0,9,'系统菜单','nested','/recycle/systemMenu','systemmenu/recycleList',NULL,'2022-03-20 17:01:11',1,NULL),(12,0,9,'系统角色','role','/recycle/systemRole','systemrole/recycleList',NULL,'2022-03-20 17:31:46',1,NULL);
+INSERT INTO `system_menu` VALUES (1,1,0,'system_manage','tools','#',NULL,NULL,'2022-03-14 17:55:24',1,NULL),(2,8,1,'system_user','user-filled','/system/user','systemuser/list',NULL,'2022-03-14 17:55:24',1,NULL),(3,9,1,'system_role','role','/system/role','systemrole/list',NULL,'2022-03-14 17:55:24',1,NULL),(4,10,1,'system_menu','nested','/system/menu','systemmenu/list',NULL,'2022-03-14 17:55:24',1,NULL),(5,0,1,'action_log','tickets','/system/actionlog','systemactionlog/list',NULL,'2022-03-14 17:55:24',1,NULL),(6,0,1,'error_log','warning','/system/errorlog','systemerrorlog/list',NULL,'2022-03-14 17:55:24',1,NULL),(7,0,1,'system_config','setting','/system/config','systemconfig/list',NULL,'2022-03-14 17:55:24',1,NULL),(8,0,1,'system_task','task','/system/task','systemtask/list',NULL,'2022-03-14 17:55:24',1,NULL),(9,0,0,'recycle','recycle','#',NULL,NULL,'2022-03-20 16:09:37',1,NULL),(10,0,9,'system_user','user-filled','/recycle/systemUser','systemuser/recycleList',NULL,'2022-03-20 16:11:49',1,NULL),(11,0,9,'system_menu','nested','/recycle/systemMenu','systemmenu/recycleList',NULL,'2022-03-20 17:01:11',1,NULL),(12,0,9,'system_role','role','/recycle/systemRole','systemrole/recycleList',NULL,'2022-03-20 17:31:46',1,'2022-04-19 09:03:14');
 /*!40000 ALTER TABLE `system_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +171,7 @@ CREATE TABLE `system_role_node` (
   `srid` int(10) unsigned NOT NULL COMMENT '系统角色ID',
   `node` varchar(100) NOT NULL COMMENT '权限节点',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限节点表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限节点表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,15 +208,6 @@ CREATE TABLE `system_task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `system_task`
---
-
-LOCK TABLES `system_task` WRITE;
-/*!40000 ALTER TABLE `system_task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_task` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_task_log`
 --
 
@@ -246,14 +226,6 @@ CREATE TABLE `system_task_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='系统任务日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `system_task_log`
---
-
-LOCK TABLES `system_task_log` WRITE;
-/*!40000 ALTER TABLE `system_task_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_task_log` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `system_user`
@@ -288,7 +260,7 @@ CREATE TABLE `system_user` (
 
 LOCK TABLES `system_user` WRITE;
 /*!40000 ALTER TABLE `system_user` DISABLE KEYS */;
-INSERT INTO `system_user` VALUES (1,'admin',NULL,'2390904403@qq.com','e10adc3949ba59abbe56e057f20f883e',NULL,'超级管理员','这是一个超级管理员账户','2022-03-14 17:55:23',1,'2022-03-24 10:44:33',3232235632,93,NULL),(2,'test',NULL,NULL,'098f6bcd4621d373cade4e832627b4f6','http://ot2.xb-l.com/storage/b5/cfc1209181f9bac0f80b4e9de8160f.gif','测试用户','测试用户','2022-03-18 15:57:31',1,NULL,NULL,0,NULL);
+INSERT INTO `system_user` VALUES (1,'admin','17319707985','2390904403@qq.com','e10adc3949ba59abbe56e057f20f883e','http://ot2.xb-l.com/storage/b5/cfc1209181f9bac0f80b4e9de8160f.gif','超级管理员','这是一个超级管理员账户','2022-03-14 17:55:23',1,'2022-04-19 08:57:58',3232235632,110,NULL);
 /*!40000 ALTER TABLE `system_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,7 +276,7 @@ CREATE TABLE `system_user_role` (
   `suid` int(10) unsigned NOT NULL COMMENT '系统用户ID',
   `srid` int(10) unsigned NOT NULL COMMENT '系统角色ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,7 +285,7 @@ CREATE TABLE `system_user_role` (
 
 LOCK TABLES `system_user_role` WRITE;
 /*!40000 ALTER TABLE `system_user_role` DISABLE KEYS */;
-INSERT INTO `system_user_role` VALUES (1,1,1),(3,2,3);
+INSERT INTO `system_user_role` VALUES (1,1,1);
 /*!40000 ALTER TABLE `system_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -326,4 +298,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-24 12:22:39
+-- Dump completed on 2022-04-19  9:48:09

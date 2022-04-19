@@ -28,7 +28,7 @@ class Systemuser extends Basic
         $username = $this->request->post('username');
         $password = $this->request->post('password');
         if (empty($username) || empty($password)) {
-            $this->error(Code::PARAM_ERROR, 'username or password not correct');
+            $this->error(Code::PARAM_ERROR, Variable::USERNAME_OR_PASSWORD_NOT_CORRECT);
         }
 
         $user = SystemUserModel::where('username', $username)
@@ -36,7 +36,7 @@ class Systemuser extends Basic
             ->whereOr('email', $username)
             ->find();
         if (empty($user) || $user->password <> $password) {
-            $this->error(Code::PARAM_ERROR, 'username or password not correct');
+            $this->error(Code::PARAM_ERROR, Variable::USERNAME_OR_PASSWORD_NOT_CORRECT);
         }
         if ($user->status <> 1) {
             $this->error(Code::USER_DISABLE);
@@ -70,15 +70,12 @@ class Systemuser extends Basic
      */
     public function editUserInfo()
     {
-        $this->_form(
-            SystemUserModel::class,
-            SystemUserValidate::class . '.userEdit',
-            ['avatar','mobile','email'],
-            'id',
-            function(&$data) {
-                $data['id'] = $this->getSuid();
-            }
-        );
+        $data = $this->request->post();
+        $data['id'] = $this->getSuid();
+        $this->validate($data, SystemUserValidate::class, 'userEdit');
+
+        $this->getSystemUserModel()->allowField(['avatar','mobile','email'])->save($data);
+        $this->success();
     }
     /**
      * 获取用户菜单
