@@ -190,4 +190,22 @@ class Storage extends Manager
             'url' => $this->driver()->getAccessUrl($fileName, $fileMd5),
         ];
     }
+
+    /**
+     * 获取已上传的切片列表
+     * @access  public
+     * @param   string  $fileName   文件名称
+     * @param   string  $fileMd5    文件md5
+     * @param   string  $uploadId   上传ID
+     * @return  array
+     */
+    public function partList(string $fileName, string $fileMd5, string $uploadId)
+    {
+        $res = $this->driver()->partList($fileName, $fileMd5, $uploadId);
+        if (!is_array($res)) {
+            $this->setError($res);
+            return false;
+        }
+        return $res;
+    }
 }
