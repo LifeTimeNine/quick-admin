@@ -31,7 +31,7 @@ class Systemactionlog extends Basic
                         ->field('id');
                 });
             });
-        $this->_page(SystemActionLogModel::class, $query, 'id desc', function(&$items) {
+        $this->_page(SystemActionLogModel::class, $query, $query->sortRule('id'), function(&$items) {
             $items->load(['systemUser'])
                 ->visible(['systemUser' => ['username', 'name', 'avatar']])
                 ->withAttr([

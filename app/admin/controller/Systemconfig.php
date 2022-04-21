@@ -26,7 +26,7 @@ class Systemconfig extends Basic
         $query = new Query();
         $query->equal('key')
             ->like('name');
-        $this->_page(SystemConfigModel::class, $query->parse());
+        $this->_page(SystemConfigModel::class, $query, $query->sortRule('id'));
     }
     /**
      * 添加系统配置

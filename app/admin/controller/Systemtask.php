@@ -36,7 +36,7 @@ class Systemtask extends Basic
         $query = new Query;
         $query->like('title')
             ->equal('exec_status,status');
-        $this->_page(SystemTaskModel::class, $query->parse());
+        $this->_page(SystemTaskModel::class, $query, $query->sortRule('id'));
     }
     /**
      * 添加系统任务

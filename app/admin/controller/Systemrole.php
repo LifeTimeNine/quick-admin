@@ -32,8 +32,8 @@ class Systemrole extends Basic
             ->equal('status');
         $this->_page(
             SystemRoleModel::class,
-            $query->parse(),
-            null,
+            $query,
+            $query->sortRule('id'),
             function($data) {
                 $data->hidden(['create_suid', 'delete_time']);
             }

@@ -22,7 +22,7 @@ class Systemerrorlog extends Basic
     {
         $query = new Query();
         $query->equal('hash,path_info,status');
-        $this->_page(ModelSystemErrorLog::class, $query->parse(), 'id desc', function(&$data) {
+        $this->_page(ModelSystemErrorLog::class, $query, $query->sortRule('id,happen_time,last_happen_time'), function(&$data) {
             $data->load(['resolveUser'])
                 ->visible(['resolveUser' => ['username']]);
         });

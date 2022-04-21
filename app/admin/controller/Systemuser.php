@@ -136,8 +136,8 @@ class Systemuser extends Basic
             ->append('id', '<>', $this->getSuid());
         $this->_page(
             SystemUserModel::class,
-            $query->parse(),
-            null,
+            $query,
+            $query->sortRule('id'),
             function($data) {
                 $data->load(['roles'])
                     ->visible([

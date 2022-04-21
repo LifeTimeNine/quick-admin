@@ -28,11 +28,11 @@ class Query extends \think\db\Where
     /**
      * 获取排序规则
      * @access  public
-     * @param   string  $fields  允许排序的字段
-     * @param   string  $queryName  参数名称
-     * @param   string  $type       处理方法
-     * @param   string  $alias      别名分隔符
-     * @param   string  $separator  排序参数分割符
+     * @param   string|array    $fields     允许排序的字段
+     * @param   string          $queryName  参数名称
+     * @param   string          $type       处理方法
+     * @param   string          $alias      别名分隔符
+     * @param   string          $separator  排序参数分割符
      * @return  string
      */
     public function sortRule($fields, string $queryName = 'sort_rule', string $type = 'get', string $alias = ':', string $separator = '.')
@@ -47,6 +47,7 @@ class Query extends \think\db\Where
         }
         $rules = [];
         foreach(explode(',', call_user_func([$this->request, $type], $queryName, '')) as $rule) {
+            if (empty($rule)) continue;
             [$field, $sortRule] = explode($separator, $rule);
             if (array_key_exists($field, $fieldRules) && in_array($sortRule, ['asc', 'desc'])) {
                 $rules[$fieldRules[$field]] = $sortRule;
