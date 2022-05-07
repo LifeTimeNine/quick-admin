@@ -39,7 +39,7 @@ class SystemUser extends Model
      */
     public function getAvatarAttr($value)
     {
-        return $value ?? request()->domain() . '/static/img/avatar.gif';
+        return $value ?: request()->domain() . '/static/img/avatar.gif';
     }
 
     /**
