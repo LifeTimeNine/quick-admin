@@ -11,6 +11,7 @@ class SystemConfig extends Model
 {
     protected $pk = 'id';
     protected $table = 'system_config';
+    protected $autoWriteTimestamp = false;
 
     /**
      * 类型 文本
