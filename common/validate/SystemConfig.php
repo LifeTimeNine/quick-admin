@@ -32,7 +32,8 @@ class SystemConfig extends Validate
 
     protected function sceneAdd()
     {
-        return $this->append('key', 'unique:' . SystemConfigModel::getTableName());
+        return $this->remove('id', true)
+            ->append('key', 'unique:' . SystemConfigModel::getTableName());
     }
     protected function sceneEdit()
     {
