@@ -3,6 +3,7 @@
 namespace exception;
 
 use model\SystemErrorLog;
+use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\facade\View;
@@ -24,6 +25,9 @@ class Handle extends \think\exception\Handle
         ) {
             return parent::render($request, $e);
         } else {
+            if ($e instanceof HttpException && $e->getStatusCode() == 404) {
+                return Html::create()->code(404);
+            }
             $hash = $this->buildHash($e);
             $errorLog = SystemErrorLog::getByHash($hash);
             if (empty($errorLog)) {
@@ -49,7 +53,7 @@ class Handle extends \think\exception\Handle
             }
 
             View::assign(['hash' => $hash]);
-            return Html::create(View::fetch(root_path('view/public') . 'exception.html'), 'html', 500);
+            return Html::create(View::fetch(root_path('view/public') . 'exception.html'))->code(500);
         }
     }
 

@@ -117,7 +117,7 @@ class SystemMenu extends Migrator
               'id' => 8,
               'sort' => 0,
               'pid' => 1,
-              'title' => 'ststem_task',
+              'title' => 'system_task',
               'icon' => 'task',
               'url' => '/system/task',
               'node' => 'systemtask/list',

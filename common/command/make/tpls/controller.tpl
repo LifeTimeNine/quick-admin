@@ -24,7 +24,7 @@ class {$class_name} extends Basic
         $query = new Query();
         $this->_page(
             {$model_name}Model::class,
-            $query->parse()
+            $query
         );
     }
     /**
@@ -37,7 +37,7 @@ class {$class_name} extends Basic
         $query = new Query();
         $this->_page(
             {$model_name}Model::onlyTrashed(),
-            $query->parse(),
+            $query,
             'delete_time desc'
         );
     }
