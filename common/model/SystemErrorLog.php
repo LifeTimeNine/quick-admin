@@ -12,7 +12,7 @@ class SystemErrorLog extends Model
     protected $pk = 'id';
     protected $table = 'system_error_log';
 
-    protected $autoWriteStamptime = 'datetime';
+    protected $autoWriteTimestamp = 'datetime';
     protected $createTime = 'happen_time';
     protected $updateTime = false;
 

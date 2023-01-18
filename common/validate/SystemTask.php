@@ -22,14 +22,14 @@ class SystemTask extends Validate
     protected $message = [
         'id.require' => Variable::REQUIRED,
         'title.require' => Variable::REQUIRED,
-        'title.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'title.max' => Variable::MAXIMUM_WORD_LIMIT,
         'command.require' => Variable::REQUIRED,
-        'command.max' => Variable::MAXIMUN_WORD_LIMIT,
-        'params.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'command.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'params.max' => Variable::MAXIMUM_WORD_LIMIT,
         'type.require' => Variable::REQUIRED,
         'type.in' => Variable::TYPE_ILLEGAL,
         'crontab.requireIf' => Variable::REQUIRED,
-        'crontab.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'crontab.max' => Variable::MAXIMUM_WORD_LIMIT,
     ];
 
     protected function sceneAdd()

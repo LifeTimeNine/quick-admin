@@ -106,19 +106,19 @@ class Local extends Driver
         ];
     }
 
-    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumner): array
+    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumber): array
     {
         if (!$this->app->cache->has("{$this->cachePrefix}{$uploadId}")) {
             return 'UploadId 不存在';
         }
         return [
-            'part_number' => $partNumner,
-            'server' => Route::buildUrl('upload/part', ['uploadId'=>$uploadId, 'partNumber'=>$partNumner])->suffix(false)->domain(true)->build(),
+            'part_number' => $partNumber,
+            'server' => Route::buildUrl('upload/part', ['uploadId'=>$uploadId, 'partNumber'=>$partNumber])->suffix(false)->domain(true)->build(),
             'method' => 'PUT',
             'header' => [
                 [
                     'key' => 'token',
-                    'value' => sha1($uploadId . $partNumner . $uploadId),
+                    'value' => sha1($uploadId . $partNumber . $uploadId),
                 ]
             ],
         ];

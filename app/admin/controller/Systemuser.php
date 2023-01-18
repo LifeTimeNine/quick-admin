@@ -116,7 +116,7 @@ class Systemuser extends Basic
             $this->error(Code::PARAM_ERROR, Variable::OLD_PASSWORD_NOT_CORRECT);
         }
         if ($this->request->post('new_password') <> $this->request->post('confirm_password')) {
-            $this->error(Code::PARAM_ERROR, Variable::ENTERRED_PASSWORDS_DIFFER);
+            $this->error(Code::PARAM_ERROR, Variable::ENTERED_PASSWORDS_DIFFER);
         }
         $this->getSystemUserModel()->save(['password' => $this->request->post('new_password')]);
         $this->success();

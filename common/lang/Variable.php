@@ -43,7 +43,7 @@ class Variable
     /**
      * Token 失效
      */
-    const TOKEN_FIALURE = 'token_fialure';
+    const TOKEN_FAILURE = 'token_failure';
     /**
      * 用户被禁用
      */
@@ -55,7 +55,7 @@ class Variable
     /**
      * 权限不足
      */
-    const PERMISSION_DENIED = 'permtssion_denied';
+    const PERMISSION_DENIED = 'permission_denied';
 
     // todo 普通的
     /**
@@ -69,7 +69,7 @@ class Variable
     /**
      * 两次输入的密码不一致
      */
-    const ENTERRED_PASSWORDS_DIFFER = 'enterred_passwords_differ';
+    const ENTERED_PASSWORDS_DIFFER = 'entered_passwords_differ';
 
     // todo 上传
     /**
@@ -93,7 +93,7 @@ class Variable
     /**
      * 超出最大字数限制
      */
-    const MAXIMUN_WORD_LIMIT = 'maximun_word_limit';
+    const MAXIMUM_WORD_LIMIT = 'maximum_word_limit';
     /**
      * 已存在
      */

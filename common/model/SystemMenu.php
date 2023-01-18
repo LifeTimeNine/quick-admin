@@ -14,7 +14,7 @@ class SystemMenu extends Model
     protected $pk = 'id';
     protected $table = 'system_menu';
 
-    protected $autoWriteStamptime = 'datetime';
+    protected $autoWriteTimestamp = 'datetime';
     protected $createTime = 'create_time';
     protected $updateTime = false;
 

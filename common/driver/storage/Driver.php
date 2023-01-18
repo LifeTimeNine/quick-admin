@@ -105,10 +105,10 @@ abstract class Driver
      * @param   string  $fileName   文件名称
      * @param   string  $fileMd5    文件md5
      * @param   string  $uploadId   上传ID
-     * @param   int     $partNumner 标记
+     * @param   int     $partNumber 标记
      * @return  array
      */
-    abstract public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumner): array;
+    abstract public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumber): array;
 
     /**
      * 获取已上传的切片列表

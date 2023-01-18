@@ -77,7 +77,7 @@ class Token
      * @access protected
      * @param   string  $name
      * @param   mixed   $default
-     * @retrurn mixed
+     * @return  mixed
      */
     protected function config(string $name = null, $default = null)
     {
@@ -154,7 +154,7 @@ class Token
         }
         // 验证有效性
         if (empty($jtiData = $this->app->cache->get("jti_{$this->data['jti']}"))) {
-            $this->setError(Code::TOKEN_FIALURE);
+            $this->setError(Code::TOKEN_FAILURE);
             return false;
         }
         // 判断有效期

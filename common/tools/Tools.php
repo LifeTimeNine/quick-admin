@@ -104,7 +104,7 @@ class Tools
         if ($type == 'normal') {
             if ($dTime < 60) {
                 if ($dTime < 10) {
-                    return '刚刚';    //by yangjs
+                    return '刚刚';
                 } else {
                     return intval(floor($dTime / 10) * 10) . "秒前";
                 }

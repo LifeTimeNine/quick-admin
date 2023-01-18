@@ -22,12 +22,12 @@ class SystemConfig extends Validate
     protected $message = [
         'id.require' => Variable::REQUIRED,
         'key.require' => Variable::REQUIRED,
-        'key.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'key.max' => Variable::MAXIMUM_WORD_LIMIT,
         'key.unique' => Variable::HAS_EXIST,
         'type.require' => Variable::REQUIRED,
         'type.in' => Variable::TYPE_ILLEGAL,
         'name.require' => Variable::REQUIRED,
-        'name.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'name.max' => Variable::MAXIMUM_WORD_LIMIT,
     ];
 
     protected function sceneAdd()

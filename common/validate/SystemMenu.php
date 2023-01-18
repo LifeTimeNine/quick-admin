@@ -25,12 +25,12 @@ class SystemMenu extends Validate
         'id.require' => Variable::REQUIRED,
         'pid.require' => Variable::REQUIRED,
         'title.require' => Variable::REQUIRED,
-        'title.max' => Variable::MAXIMUN_WORD_LIMIT,
-        'icon.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'title.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'icon.max' => Variable::MAXIMUM_WORD_LIMIT,
         'url.require' => Variable::REQUIRED,
-        'url.max' => Variable::MAXIMUN_WORD_LIMIT,
-        'node.max' => Variable::MAXIMUN_WORD_LIMIT,
-        'params.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'url.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'node.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'params.max' => Variable::MAXIMUM_WORD_LIMIT,
     ];
 
     /**

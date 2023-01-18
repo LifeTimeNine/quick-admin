@@ -104,12 +104,12 @@ class Ali extends Driver
         ];
     }
 
-    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumner): array
+    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumber): array
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $options = $this->getObject()->webPut('', "{$uploadId}/{$partNumner}.tmp");
+        $options = $this->getObject()->webPut('', "{$uploadId}/{$partNumber}.tmp");
         return [
-            'part_number' => $partNumner,
+            'part_number' => $partNumber,
             'server' => $options['url'],
             'method' => 'POST',
             'header' => $options['header'],

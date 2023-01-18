@@ -21,8 +21,8 @@ class SystemRole extends Validate
     protected $message = [
         'id.require' => Variable::REQUIRED,
         'name.require' => Variable::REQUIRED,
-        'name.max' => Variable::MAXIMUN_WORD_LIMIT,
-        'desc.max' => Variable::MAXIMUN_WORD_LIMIT,
+        'name.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'desc.max' => Variable::MAXIMUM_WORD_LIMIT,
     ];
 
     /**

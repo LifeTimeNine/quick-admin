@@ -66,12 +66,12 @@ class Qiniu extends Driver
         ];
     }
 
-    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumner): array
+    public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumber): array
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $options = $this->getObject()->webPartParams('', "{$dir}/{$name}.{$ext}", $uploadId, $partNumner);
+        $options = $this->getObject()->webPartParams('', "{$dir}/{$name}.{$ext}", $uploadId, $partNumber);
         return [
-            'part_number' => $partNumner,
+            'part_number' => $partNumber,
             'server' => $options['url'],
             'method' => 'PUT',
             'header' => $options['header']

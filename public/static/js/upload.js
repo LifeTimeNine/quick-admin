@@ -73,7 +73,7 @@
     var abortCallback;
     this.onAbort = function(callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       abortCallback = callback;
       return this;
@@ -112,13 +112,13 @@
       info: ['POST', '/common', '/upload/info'],
       partInfo: ['POST', '/common', '/upload/partInfo'],
       partOptions: ['POST', '/common', '/upload/partOptions'],
-      partComplate: ['POST', '/common', '/upload/partComplate'],
+      partComplete: ['POST', '/common', '/upload/partComplete'],
     };
     var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
     // 设置计算MD5进度回调
     this.onMd5Progress = function (callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       md5ProgressCallback = callback;
       return this;
@@ -126,7 +126,7 @@
     // 设置开始上传回调
     this.onBegin = function(callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       beginCallback = callback;
       return this;
@@ -134,7 +134,7 @@
     // 设置上传进度回调
     this.onProgress = function (callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       progressCallback = callback;
       return this;
@@ -142,7 +142,7 @@
     // 设置上传成功回调
     this.onSuccess = function(callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       successCallback = callback;
       return this;
@@ -150,7 +150,7 @@
     // 设置失败回调
     this.onFail = function(callback) {
       if (typeof callback !== 'function') {
-        throw new Error('callback is not a funcation');
+        throw new Error('callback is not a function');
       }
       failCallback = callback;
       return this;
@@ -282,7 +282,7 @@
             // 切片参数列表
             let partOptions = [];
             // 已完成切片信息
-            let complatePart = {};
+            let completePart = {};
             // 正在进行上传的任务数
             let taskNum = 0;
             // 是否发生异常 
@@ -331,27 +331,27 @@
                 let end = start + partSize >= file.size ? file.size : start + partSize;
                 let request = new Request(options.method, options.server, blobSlice.call(file, start, end), header);
                 request.onProgress((loaded, total) => {
-                  complatePart[options.part_number] = {complateSize: loaded, etag: null};
-                  callback(progressCallback, [eval(Object.values(complatePart).map(item => item.complateSize).join('+')), file.size]);
+                  completePart[options.part_number] = {completeSize: loaded, etag: null};
+                  callback(progressCallback, [eval(Object.values(completePart).map(item => item.completeSize).join('+')), file.size]);
                 }).onResponse((responseText, status) => {
                   if (errorStatus || status != 200) {
                     errorStatus = true;
                     return;
                   }
                   taskNum --;
-                  complatePart[options.part_number].etag = JSON.parse(responseText).etag || request.xhr.getResponseHeader('ETag');
+                  completePart[options.part_number].etag = JSON.parse(responseText).etag || request.xhr.getResponseHeader('ETag');
                   if (taskNum == 0 && partOptions.length == 0 && applyNum == partNum) {
                     let parts = [];
-                    for(let item in complatePart) {
-                      parts.push({partNumber: parseInt(item), etag: complatePart[item].etag});
+                    for(let item in completePart) {
+                      parts.push({partNumber: parseInt(item), etag: completePart[item].etag});
                     }
-                    (new Request(apis.partComplate[0], getApi('partComplate'), JSON.stringify({
+                    (new Request(apis.partComplete[0], getApi('partComplate'), JSON.stringify({
                       fileName: file.name,
                       fileMd5: md5,
                       uploadId: uploadId,
                       parts: parts,
                     }), {
-                      'content-type': 'applaction/json'
+                      'content-type': 'application/json'
                     })).onResponse((responseText, status) => {
                       if (status != 200) {
                         callback(failCallback, [{}]);

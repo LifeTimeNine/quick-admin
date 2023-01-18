@@ -36,7 +36,7 @@ class AdminAccess extends AccessMiddleware
      * @access public
      * @param   \think\Request  $request
      * @param   \Closure    $next
-     * @retrun \think\Response
+     * @return  \think\Response
      */
     public function handle(\think\Request $request, \Closure $next)
     {

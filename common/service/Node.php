@@ -168,10 +168,10 @@ class Node
         $appNamespace = explode('\\', $this->app->getNamespace())[0];
         $data = [];
         foreach($this->scanDir($controllerPath, 2) as $controllerFileName) {
-            $conntrollerName = pathinfo($controllerFileName, PATHINFO_FILENAME);
-            $controller = strtolower($controllerSuffix ? str_replace('Controller', '', $conntrollerName) : $conntrollerName);
+            $controllerName = pathinfo($controllerFileName, PATHINFO_FILENAME);
+            $controller = strtolower($controllerSuffix ? str_replace('Controller', '', $controllerName) : $controllerName);
             if (in_array($controller, $this->ignoreControllers)) continue;
-            $class = new \ReflectionClass("{$appNamespace}\\{$this->appName}\\{$controllerDirName}\\{$conntrollerName}");
+            $class = new \ReflectionClass("{$appNamespace}\\{$this->appName}\\{$controllerDirName}\\{$controllerName}");
             $data[$controller] = $this->parseAnnotation($class->getDocComment(), $controller);
 
             foreach($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $action) {

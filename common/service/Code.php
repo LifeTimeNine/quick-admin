@@ -45,7 +45,7 @@ class Code
     /**
      * token 失效
      */
-    const TOKEN_FIALURE = [10104, Variable::TOKEN_FIALURE];
+    const TOKEN_FAILURE = [10104, Variable::TOKEN_FAILURE];
     /**
      * 用户被禁用
      */
