@@ -30,6 +30,7 @@ class Systemconfig extends Basic
     }
     /**
      * 添加系统配置
+     * @auth    true
      */
     public function add()
     {
@@ -46,6 +47,7 @@ class Systemconfig extends Basic
     }
     /**
      * 编辑系统配置
+     * @auth    true
      */
     public function edit()
     {
@@ -62,6 +64,7 @@ class Systemconfig extends Basic
     }
     /**
      * 删除系统配置
+     * @auth    true
      */
     public function delete()
     {
