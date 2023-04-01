@@ -4,6 +4,7 @@ namespace service;
 
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use traits\tools\Error;
 use traits\tools\Instance;
 
@@ -109,7 +110,7 @@ class Token
             'data' => $data
         ];
         $this->app->cache->set("jti_{$payload['jti']}", ['has_refresh' => false], $this->config('expire'));
-        return JWT::encode($payload, $this->salt);
+        return JWT::encode($payload, $this->salt, 'HS256');
     }
     /**
      * 刷新Token
@@ -123,7 +124,7 @@ class Token
         $this->data['exp'] = $time + $this->config('expire');
         $this->data['jti'] = sha1("{$this->domain}{$this->appName}{$this->data['sub']}" . serialize($this->data['data']) . time());
         $this->app->cache->set("jti_{$this->data['jti']}", ['has_refresh' => false], $this->config('expire'));
-        $this->refreshToken = JWT::encode($this->data, $this->salt);
+        $this->refreshToken = JWT::encode($this->data, $this->salt, 'HS256');
     }
     /**
      * 解析Token
@@ -135,7 +136,7 @@ class Token
     public function parse(string $token, string $sub = null)
     {
         try {
-            $this->data = json_decode(json_encode(JWT::decode($token, $this->salt, ['HS256'])), true);
+            $this->data = json_decode(json_encode(JWT::decode($token, new Key($this->salt, 'HS256'))), true);
         } catch(ExpiredException $e) { // token过期
             $this->setError(Code::TOKEN_EXPIRE);
             return false;
