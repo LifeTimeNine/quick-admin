@@ -55,7 +55,17 @@ class Validate extends \think\Validate
         }
         $queryFieldName = $queryFieldName?: $fieldName;
         if (empty($modelName::where($queryFieldName, $value)->find())) {
-            return $this->message["{$fieldName}." . __FUNCTION__] ?? "{$fieldName} [{$value}] 不存在";
+            if (strpos($fieldName, '|')) {
+                // 字段|描述 用于指定属性名称
+                [$fieldName, $title] = explode('|', $fieldName);
+            } else {
+                $title = $this->field[$fieldName] ?? $fieldName;
+            }
+            if (isset($this->message["{$fieldName}." . __FUNCTION__])) {
+                return $this->getRuleMsg($fieldName, $title, __FUNCTION__, $rule);
+            } else {
+                return $this->parseErrorMsg(Variable::DATA_NOT_EXIST, null, $title);
+            }
         }
         return true;
     }
@@ -72,11 +82,27 @@ class Validate extends \think\Validate
         if (!class_exists($valid)) {
             throw new ClassNotFoundException("validate {$valid} does not exist", $valid);
         }
+        /** @var \basic\Validate */
         $valid = new $valid;
         if (!empty($scene)) $valid->scene($scene);
 
+        if (strpos($fieldName, '|')) {
+            // 字段|描述 用于指定属性名称
+            [$fieldName, $title] = explode('|', $fieldName);
+        } else {
+            $title = $this->field[$fieldName] ?? $fieldName;
+        }
+
         foreach($value as $key => $item) {
-            if (!$valid->check($item)) return  $this->message["{$fieldName}." . __FUNCTION__] ?? "[{$fieldName}][{$key}] {$valid->getError()}";
+            // 直接处理
+            if (!$valid->check($item)) {
+                $key ++;
+                if (isset($this->message["{$fieldName}." . __FUNCTION__])) {
+                    return $this->getRuleMsg($fieldName, $title, __FUNCTION__, $rule);
+                } else {
+                    return "{$title}: [{$key}] {$valid->getError()}";
+                }
+            }
         }
         return true;
     }
