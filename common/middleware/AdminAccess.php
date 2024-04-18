@@ -44,9 +44,12 @@ class AdminAccess extends AccessMiddleware
         if ($this->isWhite()) return $next($request);
 
         // 获取token
-        $accessToken = $request->header('access-token', '');
+        $authorization = $request->header('authorization', '');
+        if (empty($authorization) || strpos('Token ', $authorization) != 0) {
+            return json(Code::buildMsg(Code::TOKEN_ERROR));
+        }
         $tokenService = Token::instance();
-        $uid = $tokenService->parse($accessToken, 'login');
+        $uid = $tokenService->parse(substr($authorization, 6), 'login');
         if ($uid === false) {
             return json(Code::buildMsg($tokenService->getError()));
         }

@@ -23,14 +23,10 @@ class Systemconfig extends Basic
      */
     public function list()
     {
-        $query = new Query();
-        $query->equal('key')
-            ->like('name');
-        $this->_page(SystemConfigModel::class, $query, $query->sortRule('id'));
+        $this->returnList(SystemConfigModel::select()->toArray());
     }
     /**
      * 添加系统配置
-     * @auth    true
      */
     public function add()
     {
@@ -64,7 +60,6 @@ class Systemconfig extends Basic
     }
     /**
      * 删除系统配置
-     * @auth    true
      */
     public function delete()
     {
