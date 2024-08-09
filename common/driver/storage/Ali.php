@@ -3,6 +3,7 @@
 namespace driver\storage;
 
 use lang\Variable;
+use lifetime\bridge\ali\oss\Objects;
 use service\ali\oss\bucket\Basics as BucketBasics;
 use service\ali\oss\object\Basics;
 use service\ali\oss\object\Multipart;
@@ -14,90 +15,76 @@ use think\facade\Lang;
 class Ali extends Driver
 {
     /**
-     * 缓存前缀
-     * @var string
+     * 配置
+     * @var array
      */
-    protected $cachePrefix = 'upload_ali_upload_id_';
+    protected $config = [
+        // 访问Key ID
+        'access_key_id' => '',
+        // 访问key 秘钥
+        'access_key_secret' => '',
+        // 区域ID
+        'region_id' => '',
+        // 默认空间名称
+        'bucket_name' => '',
+        // 访问域名
+        'access_domain' => '',
+        // 是否使用HTTPS
+        'is_https' => true,
+        // 是否内网访问
+        'internal_access'=> false,
+        // 切片大小 (MB)
+        'part_size' => 5,
+    ];
 
     /**
-     * 获取Object实例
-     * @access  protected
-     * @return  \service\ali\oss\object\Basics
+     * 阿里云对象存储实例
+     * @var Objects
      */
-    protected function getObject()
-    {
-        return Basics::instance([
-            'accessKey_id' => $this->getConfig('accessKey_id'),
-            'accessKey_secret' => $this->getConfig('accessKey_secret'),
-            'oss_endpoint' => $this->getConfig('endpoint'),
-            'oss_bucketName' => $this->getConfig('bucketName'),
-        ]);
-    }
+    protected $object;
 
-    /**
-     * 获取切片上传实例
-     * @access  protected
-     * @return  \service\ali\oss\object\Multipart
-     */
-    protected function getMultipart()
+    public function __construct(\think\App $app, array $config = [])
     {
-        return Multipart::instance([
-            'accessKey_id' => $this->getConfig('accessKey_id'),
-            'accessKey_secret' => $this->getConfig('accessKey_secret'),
-            'oss_endpoint' => $this->getConfig('endpoint'),
-            'oss_bucketName' => $this->getConfig('bucketName'),
-        ]);
-    }
-
-    /**
-     * 获取 Bucket 实例
-     * @access  protected
-     * @return  \service\ali\oss\bucket\Basics
-     */
-    protected function getBucket()
-    {
-        return BucketBasics::instance([
-            'accessKey_id' => $this->getConfig('accessKey_id'),
-            'accessKey_secret' => $this->getConfig('accessKey_secret'),
-            'oss_endpoint' => $this->getConfig('endpoint'),
-            'oss_bucketName' => $this->getConfig('bucketName'),
-        ]);
+        parent::__construct($app, $config);
+        $this->object = new Objects($this->config);
     }
 
     public function info(string $fileName, string $fileMd5): array
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $options = $this->getObject()->webPut('', "{$dir}/{$name}.{$ext}");
+        $options = $this->object->post("{$dir}/{$name}.{$ext}");
         return [
             'server' => $options['url'],
-            'method' => 'POST',
+            'method' => $options['method'],
+            'content_type' => $options['content_type'],
             'header' => $options['header'],
+            'query' => $options['query'],
             'body' => $options['body'],
-            'file_key' => $options['fileFieldName']
+            'file_key' => $options['file_key']
         ];
     }
 
     public function has(string $fileName, string $fileMd5): bool
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $data = $this->getObject()->head('', "{$dir}/{$name}.{$ext}");
-        return $data !== false;
+        try {
+            $this->object->getHead("{$dir}/{$name}.{$ext}");
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     public function getAccessUrl(string $fileName, string $fileMd5): string
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        if ($this->getConfig('access_domain')) {
-            return ($this->getConfig('is_ssl') ? 'https://' : 'http://') . "{$this->getConfig('access_domain')}/{$dir}/{$name}.{$ext}";
-        } else {
-            return ($this->getConfig('is_ssl') ? 'https://' : 'http://') . "{$this->getConfig('bucketName')}.{$this->getConfig('endpoint')}/{$dir}/{$name}.{$ext}";
-        }
+        return $this->object->getAccessPath("{$dir}/{$name}.{$ext}");
     }
 
     public function partInfo(string $fileName, string $fileMd5): array
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $options = $this->getMultipart()->init('', "{$dir}/{$name}.{$ext}");
+        $options = $this->object->initPart("{$dir}/{$name}.{$ext}");
         return [
             'upload_id' => $options['UploadId'],
             'part_size' => $this->getConfig('part_size'),
@@ -107,24 +94,26 @@ class Ali extends Driver
     public function partOptions(string $fileName, string $fileMd5, string $uploadId, int $partNumber): array
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
-        $options = $this->getObject()->webPut('', "{$uploadId}/{$partNumber}.tmp");
+        $options = $this->object->clientUploadPart("{$dir}/{$name}.{$ext}", $uploadId, $partNumber);
         return [
-            'part_number' => $partNumber,
             'server' => $options['url'],
-            'method' => 'POST',
+            'method' => $options['method'],
+            'content_type' => $options['content_type'],
             'header' => $options['header'],
-            'body' => $options['body'],
-            'file_key' => $options['fileFieldName']
+            'query' => $options['query'],
+            'body' => $options['body'] ?? [],
+            'part_number' => $options['part_number'],
         ];
     }
 
     public function partList(string $fileName, string $fileMd5, string $uploadId): array
     {
-        $list = $this->getBucket()->getV2('','', '', '', '', 1000, $uploadId);
+        [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
+        $list = $this->object->partList("{$dir}/{$name}.{$ext}", $uploadId);
         $res = [];
-        foreach ($list['Contents'] as $item) {
+        foreach ($list['Part'] as $item) {
             $res[] = [
-                'partNumber' => pathinfo(urldecode($item['Key']), PATHINFO_FILENAME),
+                'part_number' => $item['PartNumber'],
                 'etag' => $item['ETag'],
             ];
         }
@@ -134,16 +123,10 @@ class Ali extends Driver
     public function partComplete(string $fileName, string $fileMd5, string $uploadId, array $parts)
     {
         [$dir, $name, $ext] = $this->getPathInfo($fileName, $fileMd5);
+        $partsArr = [];
+        foreach($parts as $item) $partsArr[$item['partNumber']] = $item['etag'];
         try {
-            $deleteFiles = [];
-            $etags = [];
-            foreach($parts as $part) {
-                $deleteFiles[] = "{$uploadId}/{$part['partNumber']}.tmp";
-                $res = $this->getMultipart()->copy('', "{$dir}/{$name}.{$ext}", $part['partNumber'], $uploadId, '', "{$uploadId}/{$part['partNumber']}.tmp");
-                $etags[$part['partNumber']] = trim($res['ETag'], '"');
-            }
-            $this->getMultipart()->complete('', "{$dir}/{$name}.{$ext}", $uploadId, $etags);
-            $this->getObject()->deleteMultiple('', $deleteFiles);
+            $this->object->completePart("{$dir}/{$name}.{$ext}", $uploadId, $partsArr);
         } catch (\Throwable $th) {
             return Lang::get(Variable::FILE_COMPLETE_FAil);
         }

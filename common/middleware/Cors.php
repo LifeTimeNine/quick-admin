@@ -13,7 +13,7 @@ class Cors
         header("Access-Control-Allow-Methods: GET,POST,PUT");
         header("Access-Control-Allow-Credentials:true");
         header("Access-Control-Allow-Origin:{$origin}");
-        header("Access-Control-Allow-Headers:Content-Type,Token,token,Lang,lang,Access-Token,access-token");
+        header("Access-Control-Allow-Headers:Content-Type,Lang,lang,Authorization,authorization");
         header("Access-Control-Expose-Headers:Etag,etag,Refresh-Token,refresh-token");
         if ($request->isOptions()) {
             return Response::create();

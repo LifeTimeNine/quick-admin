@@ -38,12 +38,14 @@ class Local extends Driver
         return [
             'server' => Route::buildUrl('upload/file')->suffix(false)->domain(true)->build(),
             'method' => 'POST',
+            'content_type' => 'multipart/form-data',
             'header' => [
                 [
                     'key' => 'content-type',
                     'value' => 'multipart/form-data'
                 ],
             ],
+            'query' => [],
             'body' => [
                 [
                     'key' => 'token',
@@ -115,12 +117,15 @@ class Local extends Driver
             'part_number' => $partNumber,
             'server' => Route::buildUrl('upload/part', ['uploadId'=>$uploadId, 'partNumber'=>$partNumber])->suffix(false)->domain(true)->build(),
             'method' => 'PUT',
+            'content_type' => 'application/octet-stream',
             'header' => [
                 [
                     'key' => 'token',
                     'value' => sha1($uploadId . $partNumber . $uploadId),
                 ]
             ],
+            'query' => [],
+            'body' => []
         ];
     }
 
@@ -131,7 +136,7 @@ class Local extends Driver
         foreach($partList as $item) {
             [$partNumber, $etag] = explode('/', $item);
             $res[] = [
-                'partNumber' => $partNumber,
+                'part_number' => $partNumber,
                 'etag' => $etag
             ];
         }
