@@ -1,12 +1,16 @@
 <?php
 
-namespace exception;
+declare(strict_types = 1);
+
+namespace provider;
 
 use model\SystemErrorLog;
+use think\exception\Handle;
 use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\facade\View;
+use think\Request;
 use Throwable;
 use think\Response;
 use think\response\Html;
@@ -14,7 +18,7 @@ use think\response\Html;
 /**
  * 异常处理
  */
-class Handle extends \think\exception\Handle
+class ExceptionHandle extends Handle
 {
     public function render($request, Throwable $e): Response
     {
@@ -28,15 +32,17 @@ class Handle extends \think\exception\Handle
             if ($e instanceof HttpException && $e->getStatusCode() == 404) {
                 return Html::create()->code(404);
             }
-            $hash = $this->buildHash($e);
-            $errorLog = SystemErrorLog::getByHash($hash);
+            $hash = $this->buildHash($request, $e);
+            $errorLog = SystemErrorLog::where('hash', $hash)->where('status', 1)->find();
             if (empty($errorLog)) {
                 SystemErrorLog::create([
                     'hash' => $hash,
                     'app_name' => $this->app->get('http')->getName(),
                     'path_info' => $request->pathinfo(),
                     'access_ip' => $request->ip(),
-                    'request_param' => $request->param(),
+                    'request_param' => $request->param() ?: [],
+                    'header' => $request->header() ?: [],
+                    'session' => $this->app->get('session')->all() ?: [],
                     'request_time' => date('Y-m-d H:i:s', $request->time()),
                     'error_code' => $e->getCode(),
                     'error_message' => $e->getMessage(),
@@ -60,14 +66,15 @@ class Handle extends \think\exception\Handle
     /**
      * 构建异常哈希值
      * @access  protected
-     * @param   \Throwable  $e
+     * @param   Request     $request    请求类
+     * @param   \Throwable  $e          异常类
      * @return  string
      */
-    protected function buildHash(Throwable $e): string
+    protected function buildHash(Request $request, Throwable $e): string
     {
         $arr = [
             $this->app->get('http')->getName(),
-            $this->app->get('request')->pathinfo(),
+            $request->pathinfo(),
             $e->__toString()
         ];
 

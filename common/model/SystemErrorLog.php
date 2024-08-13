@@ -13,11 +13,14 @@ class SystemErrorLog extends Model
     protected $table = 'system_error_log';
 
     protected $autoWriteTimestamp = 'datetime';
-    protected $createTime = 'happen_time';
+    protected $createTime = 'first_happen_time';
     protected $updateTime = false;
 
-    protected $json = ['request_param'];
-    protected $jsonAssoc = true;
+    protected $type = [
+        'request_param' => ['json', JSON_FORCE_OBJECT],
+        'header' => ['json', JSON_FORCE_OBJECT],
+        'session' => ['json', JSON_FORCE_OBJECT]
+    ];
 
     /**
      * 处理用户

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace basic;
 
 use think\Event;
@@ -16,7 +18,7 @@ abstract class Subscribe
         $eventName = lcfirst(basename(str_replace('\\', '/', get_class($this))));
         foreach(get_class_methods($this) as $methodName) {
             if (strpos($methodName, 'on') === 0) {
-                $events["{$eventName}." . lcfirst(str_replace('on', '', $methodName))] = [[$this, $methodName]];
+                $events["{$eventName}." . lcfirst(substr($methodName, 2))] = [[$this, $methodName]];
                 
             }
         }

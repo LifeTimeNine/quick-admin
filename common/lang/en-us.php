@@ -69,5 +69,8 @@ return [
         'mobile' => 'Mobile phone no.',
         'email' => 'Email',
         'rids' => 'Role'
+    ],
+    'system_error_log' => [
+        'resolve_remark' => 'Remark'
     ]
 ];

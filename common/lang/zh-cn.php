@@ -69,5 +69,8 @@ return [
         'mobile' => '手机号',
         'email' => '邮箱',
         'rids' => '角色'
+    ],
+    'system_error_log' => [
+        'resolve_remark' => '备注'
     ]
 ];
