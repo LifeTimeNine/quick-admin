@@ -31,6 +31,12 @@ class SystemErrorLog extends Migrator
                 Column::dateTime('request_time')->setNull(false)->setComment('请求时间')
             )
             ->addColumn(
+                Column::text('header')->setNull(false)->setComment('请求头')
+            )
+            ->addColumn(
+                Column::text('session')->setNull(false)->setComment('Session')
+            )
+            ->addColumn(
                 Column::integer('error_code')->setLimit(10)->setSigned(false)->setNull(false)->setComment('异常码')
             )
             ->addColumn(
@@ -62,6 +68,9 @@ class SystemErrorLog extends Migrator
             )
             ->addColumn(
                 Column::dateTime('resolve_time')->setNull(true)->setComment('处理时间')
+            )
+            ->addColumn(
+                Column::string('resolve_remark', 500)->setNull(true)->setComment('处理备注')
             )
             ->addIndex(
                 (new Index)->setName('hash')->setColumns(['hash'])
