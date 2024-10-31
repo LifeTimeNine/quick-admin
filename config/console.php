@@ -5,7 +5,6 @@
 return [
     // 指令定义
     'commands' => [
-        \command\system\Task::class,
         \command\make\Model::class,
         \command\make\Controller::class,
         \command\make\Validate::class,

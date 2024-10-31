@@ -15,16 +15,19 @@ class SystemTaskLog extends Migrator
                 Column::unsignedInteger('stid')->setLimit(10)->setNull(false)->setComment('系统任务ID')
             )
             ->addColumn(
-                Column::unsignedInteger('pid')->setLimit(10)->setNull(false)->setComment('执行的进程ID')
+                Column::date('start_time')->setNull(false)->setComment('开始时间')
             )
             ->addColumn(
-                Column::date('exec_time')->setNull(false)->setComment('执行时间')
+                Column::date('end_time')->setNull(false)->setComment('结束时间')
             )
             ->addColumn(
-                Column::string('run_time', 15)->setNull(false)->setComment('运行时间')
+                Column::string('runtime', 15)->setNull(false)->setComment('运行时间')
             )
             ->addColumn(
-                Column::longText('output')->setNullable()->setComment('输出内容')
+                Column::longText('out')->setNullable()->setComment('标准输出内容')
+            )
+            ->addColumn(
+                Column::longText('err')->setNullable()->setComment('异常输出内容')
             )
             ->addColumn(
                 Column::tinyInteger('result')->setLimit(1)->setUnsigned()->setNull(false)->setComment('执行结果')

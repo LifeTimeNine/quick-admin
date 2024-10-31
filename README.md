@@ -32,3 +32,8 @@ npm install
 ~~~
 npm run dev
 ~~~
+
+## 系统任务
+此模块依赖于一个计划任务管理的项目[https://github.com/LifeTimeNine/timer.git](https://github.com/LifeTimeNine/timer.git)
+
+如果要使用此模块，请安装此服务

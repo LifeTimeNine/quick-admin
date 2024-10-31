@@ -55,10 +55,10 @@ return [
     'system_task' => [
         'id' => 'System Task ID',
         'title' => 'System Task name',
-        'command' => 'Task command',
-        'params' => 'Task Parameter',
+        'exec_file' => 'Task command',
+        'args' => 'Task Parameter',
         'type' => 'Task type',
-        'crontab' => 'Timing parameters'
+        'cron' => 'Timing parameters'
     ],
     'system_user' => [
         'id' => 'System User ID',

@@ -14,22 +14,22 @@ class SystemTask extends Validate
     protected $rule = [
         'id' => 'require',
         'title' => 'require|max:100',
-        'command' => 'require|max:1000',
-        'params' => 'max:1000',
+        'exec_file' => 'require|max:1000',
+        'args' => 'max:1000',
         'type' => 'require|in:1,2',
-        'crontab' => 'requireIf:type,1|max:200'
+        'cron' => 'requireIf:type,1|max:200'
     ];
     protected $message = [
         'id.require' => Variable::REQUIRED,
         'title.require' => Variable::REQUIRED,
         'title.max' => Variable::MAXIMUM_WORD_LIMIT,
-        'command.require' => Variable::REQUIRED,
-        'command.max' => Variable::MAXIMUM_WORD_LIMIT,
-        'params.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'exec_file.require' => Variable::REQUIRED,
+        'exec_file.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'args.max' => Variable::MAXIMUM_WORD_LIMIT,
         'type.require' => Variable::REQUIRED,
         'type.in' => Variable::TYPE_ILLEGAL,
-        'crontab.requireIf' => Variable::REQUIRED,
-        'crontab.max' => Variable::MAXIMUM_WORD_LIMIT,
+        'cron.requireIf' => Variable::REQUIRED,
+        'cron.max' => Variable::MAXIMUM_WORD_LIMIT,
     ];
 
     protected function sceneAdd()

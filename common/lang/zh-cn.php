@@ -55,10 +55,10 @@ return [
     'system_task' => [
         'id' => '系统任务ID',
         'title' => '任务名称',
-        'command' => '任务指令',
-        'params' => '任务参数',
+        'exec_file' => '任务指令',
+        'args' => '任务参数',
         'type' => '任务类型',
-        'crontab' => '定时参数'
+        'cron' => '定时参数'
     ],
     'system_user' => [
         'id' => '系统用户ID',

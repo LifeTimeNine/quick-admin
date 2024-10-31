@@ -17,6 +17,7 @@ class AdminAccess extends AccessMiddleware
     protected $white = [
         'systemuser' => ['pwdLogin'],
         'systemconfig' => ['basic'],
+        'systemtask' => ['notify'],
         'upload' => ['file', 'part']
     ];
 

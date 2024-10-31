@@ -3,12 +3,15 @@
 namespace model;
 
 use basic\Model;
+use traits\model\ScopeStatus;
 
 /**
  * 系统任务模型
  */
 class SystemTask extends Model
 {
+    use ScopeStatus;
+
     protected $pk = 'id';
     protected $table = 'system_task';
 
