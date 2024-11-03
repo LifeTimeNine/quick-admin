@@ -36,4 +36,9 @@ class SystemTask extends Validate
     {
         return $this->remove('id', true);
     }
+
+    protected function sceneExec()
+    {
+        return $this->only(['id']);
+    }
 }

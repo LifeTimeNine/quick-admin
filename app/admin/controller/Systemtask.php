@@ -149,10 +149,9 @@ class Systemtask extends Basic
      */
     public function exec()
     {
-        if (!$this->request->has('id', 'post', true)) {
-            $this->error(Code::PARAM_ERROR, '缺少必须参数 id');
-        }
-        $result = Timer::instance()->taskRun($this->request->post('id/d'));
+        $data = $this->request->post();
+        $this->validate($data, SystemTaskValidate::class, 'exec');
+        $result = Timer::instance()->taskRun($data['id']);
         if ($result !== false && $result['status'] == 0) {
             $this->success();
         } else {
@@ -171,7 +170,6 @@ class Systemtask extends Basic
         if (empty($task)) {
             $this->error(Code::DATA_NOT_EXIST);
         }
-        Log::info(['event' => $event, 'data' => $data]);
         switch($event) {
             case 1: // 执行前通知
                 SystemTaskModel::update([
