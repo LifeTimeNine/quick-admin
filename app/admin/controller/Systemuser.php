@@ -2,6 +2,8 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use lang\Variable;
 use model\SystemMenu;
 use model\SystemUser as SystemUserModel;
@@ -14,12 +16,11 @@ use tools\Tools;
 use traits\controller\QuickAction;
 use validate\SystemUser as SystemUserValidate;
 
-/**
- * 用户管理
- */
+#[Controller('用户管理')]
 class Systemuser extends Basic
 {
     use QuickAction;
+
     /**
      * 密码登录
      */
@@ -122,11 +123,7 @@ class Systemuser extends Basic
         $this->success();
     }
 
-    /**
-     * 系统用户列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统用户列表', true, true)]
     public function list()
     {
         $query = new Query();
@@ -148,11 +145,8 @@ class Systemuser extends Basic
             }
         );
     }
-    /**
-     * 系统用户回收站列表
-     * @menu    true
-     * @auth    true
-     */
+
+    #[Action('系统用户回收站列表', true, true)]
     public function recycleList()
     {
         $query = new Query();
@@ -173,11 +167,8 @@ class Systemuser extends Basic
             }
         );
     }
-    /**
-     * 创建系统用户
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('创建系统用户', true, log:true)]
     public function add()
     {
         $this->_form(
@@ -193,11 +184,7 @@ class Systemuser extends Basic
             });
     }
 
-    /**
-     * 编辑系统用户
-     * @auth    true
-     * @log     true
-     */
+    #[Action('编辑系统用户', true, log:true)]
     public function edit()
     {
         $this->_form(
@@ -211,49 +198,34 @@ class Systemuser extends Basic
                 $model->roles()->attach($data['rids']);
             });
     }
-    /**
-     * 修改系统用户状态
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('修改系统用户状态', true, log:true)]
     public function modifyStatus()
     {
         $this->_save(SystemUserModel::class, [
             'status' => !empty($this->request->post('enable')) ? 1 : 2,
         ]);
     }
-    /**
-     * 软删除系统用户
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('软删除系统用户', true, log:true)]
     public function softDelete()
     {
         $this->_delete(SystemUserModel::class);
     }
-    /**
-     * 恢复软删除系统用户
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('恢复软删除系统用户', true, log:true)]
     public function restore()
     {
         $this->_restore(SystemUserModel::class);
     }
-    /**
-     * 完全删除系统用户
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('完全删除系统用户', true, log:true)]
     public function delete()
     {
         $this->_delete(SystemUserModel::class, true);
     }
-    /**
-     * 重置密码
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('重置密码', true, log:true)]
     public function resetPwd()
     {
         $user = SystemUserModel::find($this->request->post('id'));

@@ -2,33 +2,25 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemConfig as SystemConfigModel;
-use service\SystemConfig as SystemConfigService;;
 use traits\controller\QuickAction;
 use validate\SystemConfig as SystemConfigValidate;
 
-/**
- * 系统配置
- */
+#[Controller('系统配置')]
 class Systemconfig extends Basic
 {
 
     use QuickAction;
 
-    /**
-     * 系统配置列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统配置列表', true, true)]
     public function list()
     {
         $this->returnList(SystemConfigModel::select()->toArray());
     }
-    /**
-     * 编辑系统配置
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('编辑系统配置', true, log: true)]
     public function edit()
     {
         $this->_form(

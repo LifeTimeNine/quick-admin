@@ -7,6 +7,8 @@ use think\model\concern\SoftDelete;
 
 /**
  * 系统用户模型
+ * @method static $this withTrashed()
+ * @method static $this onlyTrashed()
  */
 class SystemUser extends Model
 {

@@ -8,6 +8,8 @@ use traits\model\ScopeStatus;
 
 /**
  * 系统菜单模型
+ * @method static $this withTrashed()
+ * @method static $this onlyTrashed()
  */
 class SystemMenu extends Model
 {

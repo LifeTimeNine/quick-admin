@@ -2,6 +2,8 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemMenu as SystemMenuModel;
 use service\Node;
 use tools\Query;
@@ -9,19 +11,13 @@ use tools\Tools;
 use traits\controller\QuickAction;
 use validate\SystemMenu as SystemMenuValidate;
 
-/**
- * 系统菜单管理
- */
+#[Controller('系统菜单管理')]
 class Systemmenu extends Basic
 {
 
     use QuickAction;
 
-    /**
-     * 系统菜单列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统菜单列表', true, true)]
     public function list()
     {
         $list = SystemMenuModel::order('sort', 'desc')->select()->hidden(['delete_time'])->toArray();
@@ -33,11 +29,8 @@ class Systemmenu extends Basic
         });
         $this->returnList($list);
     }
-    /**
-     * 系统菜单回收站列表
-     * @menu    true
-     * @auth    true
-     */
+
+    #[Action('系统菜单回收站列表', true, true)]
     public function recycleList()
     {
         $this->_page(
@@ -46,11 +39,8 @@ class Systemmenu extends Basic
             'delete_time desc',
         );
     }
-    /**
-     * 添加系统菜单
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('添加系统菜单', true, log: true)]
     public function add()
     {
         $this->_form(
@@ -59,11 +49,8 @@ class Systemmenu extends Basic
             ['pid','title','icon','url','node','params']
         );
     }
-    /**
-     * 编辑系统菜单
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('编辑系统菜单', true, log: true)]
     public function edit()
     {
         $this->_form(
@@ -72,49 +59,34 @@ class Systemmenu extends Basic
             ['pid','title','icon','url','node','params']
         );
     }
-    /**
-     * 修改系统菜单状态
-     * @auth true
-     * @log true
-     */
+
+    #[Action('修改系统菜单状态', true, log: true)]
     public function modifyStatus()
     {
         $this->_save(SystemMenuModel::class, [
             'status' => !empty($this->request->post('enable')) ? 1 : 2,
         ]);
     }
-    /**
-     * 软删除系统菜单
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('软删除系统菜单', true, log: true)]
     public function softDelete()
     {
         $this->_delete(SystemMenuModel::class);
     }
-    /**
-     * 恢复软删除系统菜单
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('恢复软删除系统菜单', true, log: true)]
     public function restore()
     {
         $this->_restore(SystemMenuModel::class);
     }
-    /**
-     * 完全删除系统菜单
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('完全删除系统菜单', true, log: true)]
     public function delete()
     {
         $this->_delete(SystemMenuModel::class, true);
     }
-    /**
-     * 设置系统菜单排序权重
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('设置系统菜单排序权重', true, log: true)]
     public function setSort()
     {
         $this->_save(SystemMenuModel::class, [

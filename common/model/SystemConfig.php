@@ -28,6 +28,10 @@ class SystemConfig extends Model
      * 类型 Map表
      */
     const TYPE_MAP = 3;
+    /**
+     * 类型 图片
+     */
+    const TYPE_IMG = 4;
 
     /** 键 系统名称 */
     const KEY_SYSTEM_NAME = 'system_name';

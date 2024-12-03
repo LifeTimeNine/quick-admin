@@ -2,7 +2,7 @@
     "name": "lifetime/quick-admin",
     "description": "Thinkphp6 based management background",
     "type": "project",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "keywords": [
         "Quick",
         "Admin"
@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": ">=8.0.0",
-        "topthink/framework": "^6.1.0",
+        "topthink/framework": "^8.0.3",
         "topthink/think-orm": "^3.0",
         "topthink/think-multi-app": "^1.0",
         "firebase/php-jwt": "^6.0.0",

@@ -2,24 +2,20 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemActionLog as SystemActionLogModel;
 use model\SystemUser;
 use service\Node;
 use tools\Query;
 use traits\controller\QuickAction;
 
-/**
- * 系统操作日志管理
- */
+#[Controller('系统操作日志管理')]
 class Systemactionlog extends Basic
 {
     use QuickAction;
 
-    /**
-     * 系统操作日志列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统操作日志列表', true, true)]
     public function list()
     {
         $query = new Query();
