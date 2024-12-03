@@ -2,7 +2,8 @@
 
 namespace basic;
 
-use service\Code;
+use response\Code;
+use response\Result;
 use think\exception\HttpResponseException;
 use think\Response;
 use think\response\Json;
@@ -43,14 +44,14 @@ abstract class Controller
     /**
      * 返回数据
      * @access  protected
-     * @param   int|array   $code       异常码(自定义或从 Code 类中取)
+     * @param   int|Code    $code       异常码
      * @param   string      $message    消息
      * @param   array       $data       数据
      * @throws  \think\exception\HttpResponseException
      */
-    protected function return($code, string $message = null, $data = null)
+    protected function return(int|Code $code, ?string $message = null, array $data = [])
     {
-        throw new HttpResponseException(Json::create(Code::buildMsg($code, $message, $data), 'json'));
+        throw new HttpResponseException(Json::create(Result::create($code, $message, $data)->build(), 'json'));
     }
 
     /**
@@ -65,12 +66,12 @@ abstract class Controller
     /**
      * 返回异常消息
      * @access  protected
-     * @param   int|array   $code       异常码(自定义或从 Code 类中取)
+     * @param   int|Code    $code       异常码(自定义或从 Code 类中取)
      * @param   string      $message    消息
      * @param   array       $data       数据
      * @throws  \think\exception\HttpResponseException
      */
-    protected function error($code = Code::ERROR, string $message = null, $data = null)
+    protected function error(int|Code $code = Code::ERROR, string $message = null, $data = [])
     {
         $this->return($code, $message, $data);
     }

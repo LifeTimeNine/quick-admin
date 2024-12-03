@@ -42,7 +42,7 @@ class Systemmenu extends Basic
     {
         $this->_page(
             SystemMenuModel::onlyTrashed(),
-            null,
+            [],
             'delete_time desc',
         );
     }

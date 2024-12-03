@@ -19,43 +19,43 @@ class Variable
     /**
      * 参数异常
      */
-    const PARAM_ERROR = 'param_error';
+    const PARAM_ERROR = 'param error';
     /**
      * 操作失败
      */
-    const ACTION_FAIL = 'action_fail';
+    const ACTION_FAIL = 'action fail';
     /**
      * 数据不存在
      */
-    const DATA_NOT_EXIST = 'data_not_exist';
+    const DATA_NOT_EXIST = 'data not exist';
     /**
      * Token 异常
      */
-    const TOKEN_ERROR = 'token_error';
+    const TOKEN_ERROR = 'token error';
     /**
      * Token 过期
      */
-    const TOKEN_EXPIRE = 'token_expire';
+    const TOKEN_EXPIRE = 'token expire';
     /**
      * Token 刷新失败
      */
-    const TOKEN_REFRESH_FAIL = 'token_refresh_fail';
+    const TOKEN_REFRESH_FAIL = 'token refresh fail';
     /**
      * Token 失效
      */
-    const TOKEN_FAILURE = 'token_failure';
+    const TOKEN_FAILURE = 'token failure';
     /**
      * 用户被禁用
      */
-    const USER_DISABLE = 'user_disable';
+    const USER_DISABLE = 'user disable';
     /**
      * 用户被登录
      */
-    const USER_LOGIN = 'user_login';
+    const USER_LOGIN = 'user login';
     /**
      * 权限不足
      */
-    const PERMISSION_DENIED = 'permission_denied';
+    const PERMISSION_DENIED = 'permission denied';
 
     // todo 普通的
     /**

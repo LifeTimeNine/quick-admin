@@ -2,9 +2,9 @@
 
 namespace app\admin\controller;
 
+use response\Code;
 use service\Storage;
 use think\response\Json;
-use service\Code;
 use think\Response;
 
 class Upload extends Basic
@@ -27,7 +27,9 @@ class Upload extends Basic
      */
     public function file()
     {
-        $res = Storage::instance()->storage('local')->saveFile();
+        /** @var \driver\storage\Local */
+        $driver = Storage::instance()->storage('local');
+        $res = $driver->saveFile();
         if ($res !== true) {
             return Json::create(['message' => $res], 'json')->code(400);
         } else {
@@ -71,7 +73,9 @@ class Upload extends Basic
     public function part()
     {
         $storage = Storage::instance();
-        $res = $storage->storage('local')->part();
+        /** @var \driver\storage\Local */
+        $driver = Storage::instance()->storage('local');
+        $res = $storage->part();
         if (!is_array($res)) {
             return Response::create($storage->getError(), 'html', 400);
         }

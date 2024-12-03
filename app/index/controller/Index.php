@@ -1,10 +1,14 @@
 <?php
 namespace app\index\controller;
 
-class Index
+use basic\Controller;
+use service\Code;
+
+class Index extends Controller
 {
     public function index()
     {
+        $this->return(Code::DATA_NOT_EXIST);
         echo "Quick admin";
     }
 

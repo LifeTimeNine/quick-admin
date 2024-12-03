@@ -2,10 +2,9 @@
 
 namespace app\admin\controller;
 
-use lang\Variable;
 use model\SystemTask as SystemTaskModel;
 use model\SystemTaskLog;
-use service\Code;
+use response\Code;
 use service\Timer;
 use think\facade\Log;
 use tools\Query;

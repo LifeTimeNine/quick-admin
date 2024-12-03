@@ -126,7 +126,7 @@ class Node
     {
         $cacheKey = "{$this->userNodeCachePrefix}{$uid}";
         if ($this->app->cache->has($cacheKey) && !$forceRefresh) {
-            return $this->app->cache->get($cacheKey);
+            return $this->app->cache->get($cacheKey) ?: [];
         }
         $srids = SystemUserRole::where('suid', $uid)->column('srid');
         if ($uid == 1 || in_array(1, $srids)) {
