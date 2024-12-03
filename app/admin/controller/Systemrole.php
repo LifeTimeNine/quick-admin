@@ -2,27 +2,23 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemRole as SystemRoleModel;
 use model\SystemRoleNode;
+use response\Code;
 use service\Node;
 use think\facade\Db;
-use service\Code;
 use tools\Query;
 use traits\controller\QuickAction;
 use validate\SystemRole as SystemRoleValid;
 
-/**
- * 系统角色管理
- */
+#[Controller('系统角色管理')]
 class Systemrole extends Basic
 {
     use QuickAction;
 
-    /**
-     * 系统角色列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统角色列表', true, true)]
     public function list()
     {
         $query = new Query();
@@ -39,11 +35,8 @@ class Systemrole extends Basic
             }
         );
     }
-    /**
-     * 系统角色回收站列表
-     * @menu    true
-     * @auth    true
-     */
+
+    #[Action('系统角色回收站列表', true, true)]
     public function recycleList()
     {
         $query = new Query();
@@ -60,11 +53,8 @@ class Systemrole extends Basic
             }
         );
     }
-    /**
-     * 添加系统角色
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('添加系统角色', true, log: true)]
     public function add()
     {
         $this->_form(
@@ -77,10 +67,8 @@ class Systemrole extends Basic
             }
         );
     }
-    /**
-     * 系统角色详情
-     * @auth    true
-     */
+
+    #[Action('系统角色详情', true)]
     public function detail()
     {
         $model = SystemRoleModel::where('create_suid', $this->getSuid());
@@ -88,11 +76,8 @@ class Systemrole extends Basic
             $data->hidden(['create_suid', 'delete_time']);
         });
     }
-    /**
-     * 编辑系统角色
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('编辑系统角色', true, log: true)]
     public function edit()
     {
         $this->_form(
@@ -101,40 +86,28 @@ class Systemrole extends Basic
             ['name', 'desc'],
         );
     }
-    /**
-     * 修改系统角色状态
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('修改系统角色状态', true, log: true)]
     public function modifyStatus()
     {
         $this->_save(SystemRoleModel::class, [
             'status' => !empty($this->request->post('enable')) ? 1 : 2,
         ]);
     }
-    /**
-     * 软删除系统角色
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('软删除系统角色', true, log: true)]
     public function softDelete()
     {
         $this->_delete(SystemRoleModel::class);
     }
-    /**
-     * 系统角色软删除恢复
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('系统角色软删除恢复', true, log: true)]
     public function restore()
     {
         $this->_restore(SystemRoleModel::class);
     }
-    /**
-     * 系统角色真实删除
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('系统角色真实删除', true, log: true)]
     public function delete()
     {
         $this->_delete(SystemRoleModel::class, true, null, function($pk, $condition) {
@@ -160,11 +133,7 @@ class Systemrole extends Basic
         $this->returnList($list); 
     }
 
-    /**
-     * 修改角色节点
-     * @auth    true
-     * @log     true
-     */
+    #[Action('修改角色节点', true, log: true)]
     public function modifyRoleNodes()
     {
         if (empty(SystemRoleModel::find($this->request->post('srid')))) {

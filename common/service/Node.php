@@ -2,6 +2,8 @@
 
 namespace service;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemRoleNode;
 use model\SystemUserRole;
 use traits\tools\Instance;
@@ -126,7 +128,7 @@ class Node
     {
         $cacheKey = "{$this->userNodeCachePrefix}{$uid}";
         if ($this->app->cache->has($cacheKey) && !$forceRefresh) {
-            return $this->app->cache->get($cacheKey);
+            return $this->app->cache->get($cacheKey) ?: [];
         }
         $srids = SystemUserRole::where('suid', $uid)->column('srid');
         if ($uid == 1 || in_array(1, $srids)) {
@@ -171,12 +173,29 @@ class Node
             $controllerName = pathinfo($controllerFileName, PATHINFO_FILENAME);
             $controller = strtolower($controllerSuffix ? str_replace('Controller', '', $controllerName) : $controllerName);
             if (in_array($controller, $this->ignoreControllers)) continue;
+            
             $class = new \ReflectionClass("{$appNamespace}\\{$this->appName}\\{$controllerDirName}\\{$controllerName}");
-            $data[$controller] = $this->parseAnnotation($class->getDocComment(), $controller);
+            $controllerAttributeList = $class->getAttributes(Controller::class);
 
-            foreach($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $action) {
-                if (in_array($action->getName(), $this->ignoreActions)) continue;
-                $data[$controller]['actions'][$action->getName()] = $this->parseAnnotation($action->getDocComment(), $action->getName(), 2);
+            if (!empty($controllerAttributeList)) {
+                $data[$controller] = [
+                    'title' => $controllerAttributeList[0]->newInstance()->getTitle(),
+                    'actions' => []
+                ];
+
+                foreach($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $action) {
+                    if (in_array($action->getName(), $this->ignoreActions)) continue;
+                    $actionAttributeList = $action->getAttributes(Action::class);
+                    if (!empty($actionAttributeList)) {
+                        $actionAttribute = $actionAttributeList[0]->newInstance();
+                        $data[$controller]['actions'][$action->getName()] = [
+                            'title' => $actionAttribute->getTitle(),
+                            'auth' => $actionAttribute->getAuth(),
+                            'menu' => $actionAttribute->getMenu(),
+                            'log' => $actionAttribute->getLog()
+                        ];
+                    }
+                }
             }
         }
         $this->appNodeTree = $data;
@@ -295,28 +314,5 @@ class Node
             }
         }
         return $list;
-    }
-
-    /**
-     * 解析注释
-     * @param   string  $annotation     注释内容
-     * @param   string  $default        默认标题
-     * @param   int     $type           类型 1-类注释 2-方法注释
-     * @return  array
-     */
-    protected function parseAnnotation($annotation, $default = '', $type = 1)
-    {
-        $text = strtr($annotation, "\n", ' ');
-        $title = preg_replace('/^\/\*\s*\*\s*\*\s*(.*?)\s*\*.*?$/', '$1', $text);
-        $data = ['title' => $title ? $title : $default];
-        if ($type == 2) {
-            // 是否验证节点
-            if (preg_match('/@auth\s*true/i', $text)) $data['auth'] = true;
-            // 是否在菜单中显示
-            if (preg_match('/@menu\s*true/i', $text)) $data['menu'] = true;
-            //是否记录日志
-            if (preg_match('/@log\s*true/i', $text)) $data['log'] = true;
-        }
-        return $data;
     }
 }

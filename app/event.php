@@ -6,6 +6,6 @@
 
 return [
     'subscribe' => [
-        \subscribe\System::class
+        'system' => \subscribe\System::class
     ]
 ];

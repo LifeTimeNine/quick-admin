@@ -1,6 +1,7 @@
 <?php
 
 use lang\Variable;
+use response\Code;
 
 return [
     /** 异常Code 消息 */

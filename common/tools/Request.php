@@ -48,7 +48,7 @@ class Request
      * 响应头
      * @var array
      */
-    protected $headers = [];
+    protected $header = [];
 
     /**
      * 构造函数

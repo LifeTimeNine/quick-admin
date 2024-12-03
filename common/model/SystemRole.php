@@ -8,6 +8,8 @@ use traits\model\ScopeStatus;
 
 /**
  * 系统角色表
+ * @method static $this withTrashed()
+ * @method static $this onlyTrashed()
  */
 class SystemRole extends Model
 {

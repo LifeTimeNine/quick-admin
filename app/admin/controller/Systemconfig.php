@@ -2,49 +2,25 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use model\SystemConfig as SystemConfigModel;
-use service\SystemConfig as SystemConfigService;
-use tools\Query;
 use traits\controller\QuickAction;
 use validate\SystemConfig as SystemConfigValidate;
 
-/**
- * 系统配置
- */
+#[Controller('系统配置')]
 class Systemconfig extends Basic
 {
 
     use QuickAction;
 
-    /**
-     * 系统配置列表
-     * @menu    true
-     * @auth    true
-     */
+    #[Action('系统配置列表', true, true)]
     public function list()
     {
         $this->returnList(SystemConfigModel::select()->toArray());
     }
-    /**
-     * 添加系统配置
-     */
-    public function add()
-    {
-        $this->_form(
-            SystemConfigModel::class,
-            SystemConfigValidate::class . '.add',
-            ['key', 'name', 'type', 'value'],
-            null,
-            null,
-            function() {
-                SystemConfigService::instance()->refresh();
-            }
-        );
-    }
-    /**
-     * 编辑系统配置
-     * @auth    true
-     */
+
+    #[Action('编辑系统配置', true, log: true)]
     public function edit()
     {
         $this->_form(
@@ -53,23 +29,19 @@ class Systemconfig extends Basic
             ['name', 'type', 'value'],
             null,
             null,
-            function() {
-                SystemConfigService::instance()->refresh();
+            function($model, $data) {
+                SystemConfigModel::refreshCache($data['key']);
             }
         );
     }
-    /**
-     * 删除系统配置
-     */
-    public function delete()
-    {
-        $this->_delete(SystemConfigModel::class);
-    }
+
     /**
      * 基础配置
      */
     public function basic()
     {
-        $this->returnMap(SystemConfigService::instance()->batchGet(['system_name']));
+        $this->returnMap(SystemConfigModel::batchGet([
+            SystemConfigModel::KEY_SYSTEM_NAME
+        ]));
     }
 }

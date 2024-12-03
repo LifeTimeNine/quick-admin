@@ -2,25 +2,23 @@
 
 namespace app\admin\controller;
 
-use lang\Variable;
+use attribute\Action;
+use attribute\Controller;
 use model\SystemTask as SystemTaskModel;
 use model\SystemTaskLog;
-use service\Code;
+use response\Code;
 use service\Timer;
 use think\facade\Log;
 use tools\Query;
 use traits\controller\QuickAction;
 use validate\SystemTask as SystemTaskValidate;
 
-/**
- * 系统任务管理
- */
+#[Controller('系统任务管理')]
 class Systemtask extends Basic
 {
     use QuickAction;
-    /**
-     * 获取服务状态
-     */
+
+    #[Action('获取服务状态', true)]
     public function status()
     {
         $status = Timer::instance()->state();
@@ -29,11 +27,8 @@ class Systemtask extends Basic
             'command' => 'systemctl start timer'
         ]);
     }
-    /**
-     * 系统任务列表
-     * @menu    true
-     * @auth    true
-     */
+
+    #[Action('系统任务列表', true, true)]
     public function list()
     {
         $query = new Query;
@@ -41,11 +36,8 @@ class Systemtask extends Basic
             ->equal('exec_status,status');
         $this->_page(SystemTaskModel::class, $query, $query->sortRule('id'));
     }
-    /**
-     * 添加系统任务
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('添加系统任务', true, log: true)]
     public function add()
     {
         $this->_form(
@@ -67,11 +59,8 @@ class Systemtask extends Basic
             }
         );
     }
-    /**
-     * 编辑系统任务
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('编辑系统任务', true, log: true)]
     public function edit()
     {
         $this->_form(
@@ -93,11 +82,8 @@ class Systemtask extends Basic
             }
         );
     }
-    /**
-     * 修改系统任务状态
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('修改系统任务状态', true, log: true)]
     public function modifyStatus()
     {
         $this->_save(
@@ -116,11 +102,8 @@ class Systemtask extends Basic
             }
         );
     }
-    /**
-     * 删除系统任务
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('删除系统任务', true, log: true)]
     public function delete()
     {
         $this->_delete(
@@ -134,19 +117,14 @@ class Systemtask extends Basic
             }
         );
     }
-    /**
-     * 系统任务日志
-     * @auth    true
-     */
+
+    #[Action('系统任务日志', true)]
     public function logList()
     {
         $this->_page(SystemTaskLog::class, ['stid' => $this->request->get('stid/d')]);
     }
-    /**
-     * 执行系统任务
-     * @auth    true
-     * @log     true
-     */
+
+    #[Action('执行系统任务', true, log: true)]
     public function exec()
     {
         $data = $this->request->post();

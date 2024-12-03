@@ -10,7 +10,7 @@ use Throwable;
 /**
  * 系统相关事件订阅
  */
-class System extends Subscribe
+class System
 {
     /**
      * 异常事件
@@ -18,8 +18,8 @@ class System extends Subscribe
      * @param   Throwable   $t      异常类
      * @return  void
      */
-    public function onException(Throwable $t)
+    public function onException(Throwable $th)
     {
-        
+        dump($th);
     }
 }

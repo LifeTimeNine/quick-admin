@@ -3,6 +3,7 @@
 namespace basic;
 
 use think\exception\ClassNotFoundException;
+use lang\Variable;
 
 /**
  * 验证器基类
@@ -44,7 +45,7 @@ class Validate extends \think\Validate
     /**
      * 验证模型是否存在某条记录
      */
-    protected function dataExist($value, $rule, $data = [], $fieldName = '')
+    protected function dataExist($value, $rule, $data = [], $fieldName = ''): string|bool
     {
         @list($modelName, $queryFieldName) = explode(',', $rule);
         if (strpos($modelName, '\\') === false) {
@@ -73,7 +74,7 @@ class Validate extends \think\Validate
     /**
      * 验证数组数据
      */
-    protected function arrayItem($value, $rule, $data = [], $fieldName = '')
+    protected function arrayItem($value, $rule, $data = [], $fieldName = ''): string|bool
     {
         @list($valid, $scene) = explode(',', $rule);
         if (strpos($valid, '\\') === false) {
