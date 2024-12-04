@@ -45,7 +45,7 @@ enum Code: int {
             Code::TOKEN_ERROR => 'token error',
             Code::TOKEN_EXPIRE => 'token expire',
             Code::TOKEN_REFRESH_FAIL => 'token refresh fail',
-            Code::TOKEN_FAILURE => 'token_failure',
+            Code::TOKEN_FAILURE => 'token failure',
             Code::USER_DISABLE => 'user disable',
             Code::USER_LOGIN => 'user login',
             Code::PERMISSION_DENIED => 'permission denied'

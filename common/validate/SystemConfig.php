@@ -11,11 +11,11 @@ use model\SystemConfig as SystemConfigModel;
  */
 class SystemConfig extends Validate
 {
-    protected $model = \model\SystemConfig::class;
+    protected $model = SystemConfigModel::class;
     protected $rule = [
         'id' => 'require',
         'key' => 'require|max:100',
-        'type' => 'require|in:1,2,3',
+        'type' => 'require',
         'name' => 'require|max:200'
     ];
 
@@ -33,6 +33,12 @@ class SystemConfig extends Validate
     protected function sceneAdd()
     {
         return $this->remove('id', true)
+            ->append('type', 'in:' . implode(',', [
+                SystemConfigModel::TYPE_TEXT,
+                SystemConfigModel::TYPE_LIST,
+                SystemConfigModel::TYPE_MAP,
+                SystemConfigModel::TYPE_IMG
+            ]))
             ->append('key', 'unique:' . SystemConfigModel::getTableName());
     }
     protected function sceneEdit()

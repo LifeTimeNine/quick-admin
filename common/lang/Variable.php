@@ -7,7 +7,7 @@ namespace lang;
  */
 class Variable
 {
-    // todo 异常Code 消息
+    // 异常Code
     /**
      * 成功
      */
@@ -57,35 +57,35 @@ class Variable
      */
     const PERMISSION_DENIED = 'permission denied';
 
-    // todo 普通的
+    // 普通的
     /**
      * 用户名或密码不正确
      */
-    const USERNAME_OR_PASSWORD_NOT_CORRECT = 'username_or_password_not_correct';
+    const USERNAME_OR_PASSWORD_NOT_CORRECT = 'username or password not correct';
     /**
      * 原密码不正确
      */
-    const OLD_PASSWORD_NOT_CORRECT = 'old_password_not_correct';
+    const OLD_PASSWORD_NOT_CORRECT = 'old password not correct';
     /**
      * 两次输入的密码不一致
      */
-    const ENTERED_PASSWORDS_DIFFER = 'entered_passwords_differ';
+    const ENTERED_PASSWORDS_DIFFER = 'entered passwords differ';
 
-    // todo 上传
+    // 上传
     /**
      * 文件不存在
      */
-    const FILE_NOT_EXIST = 'file_not_exist';
+    const FILE_NOT_EXIST = 'file not exist';
     /**
      * 文件合并失败
      */
-    const FILE_COMPLETE_FAil = 'file_complete_fail';
+    const FILE_COMPLETE_FAil = 'file complete fail';
     /**
      * 不允许上传此类文件
      */
-    const FILE_TYPE_NOT_ALLOWED = 'file_type_not_allowed';
+    const FILE_TYPE_NOT_ALLOWED = 'file type not allowed';
 
-    // todo 验证器
+    // 验证器
     /**
      * 必填
      */
@@ -93,21 +93,21 @@ class Variable
     /**
      * 超出最大字数限制
      */
-    const MAXIMUM_WORD_LIMIT = 'maximum_word_limit';
+    const MAXIMUM_WORD_LIMIT = 'maximum word limit';
     /**
      * 已存在
      */
-    const HAS_EXIST = 'has_exist';
+    const HAS_EXIST = 'has exist';
     /**
      * 类型不合法
      */
-    const TYPE_ILLEGAL = 'type_illegal';
+    const TYPE_ILLEGAL = 'type illegal';
     /**
      * URL 不正确
      */
-    const URL_NOT_CORRECT = 'url_not_correct';
+    const URL_NOT_CORRECT = 'url not correct';
     /**
      * 格式不正确
      */
-    const FORMAT_CORRECT = 'format_correct';
+    const FORMAT_CORRECT = 'format correct';
 }

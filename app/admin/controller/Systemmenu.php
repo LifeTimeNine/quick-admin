@@ -6,7 +6,6 @@ use attribute\Action;
 use attribute\Controller;
 use model\SystemMenu as SystemMenuModel;
 use service\Node;
-use tools\Query;
 use tools\Tools;
 use traits\controller\QuickAction;
 use validate\SystemMenu as SystemMenuValidate;

@@ -251,7 +251,6 @@ trait QuickAction
             } catch (\Throwable $th) {
                 // 回滚事务
                 Db::rollback();
-                var_dump($th->__toString());
                 $this->error(Code::ACTION_FAIL, $th->getMessage());
             }
             $this->success();
@@ -309,7 +308,7 @@ trait QuickAction
         } catch (\Throwable $th) {
             // 回滚事务
             Db::rollback();
-            $this->error(Code::ACTION_FAIL, $this->app->isDebug() ? "操作失败: {$th->getMessage()}" : '');
+            $this->error(Code::ACTION_FAIL, $th->getMessage());
         }
         $this->success();
     }
