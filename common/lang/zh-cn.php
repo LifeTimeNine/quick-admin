@@ -34,11 +34,6 @@ return [
     Variable::FORMAT_CORRECT => ':attribute格式不正确',
 
     /** 数据表字段 */
-    'system_config' => [
-        'id' => '系统配置ID',
-        'key' => '配置键',
-        'name' => '配置名称'
-    ],
     'system_role' => [
         'id' => '系统角色ID',
         'name' => '系统角色名称',

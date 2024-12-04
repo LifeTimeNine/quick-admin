@@ -33,11 +33,6 @@ return [
     Variable::FORMAT_CORRECT => 'The :attribute format is incorrect',
 
     /** 数据表字段 */
-    'system_config' => [
-        'id' => 'System Configuration ID',
-        'key' => 'Configuration key',
-        'name' => 'Configuration name'
-    ],
     'system_role' => [
         'id' => 'system role ID',
         'name' => 'system role name',
