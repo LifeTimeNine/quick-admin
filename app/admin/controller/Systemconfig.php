@@ -26,7 +26,7 @@ class Systemconfig extends Basic
         $this->_form(
             SystemConfigModel::class,
             null,
-            ['name', 'type', 'value'],
+            ['value'],
             null,
             null,
             function($model, $data) {
