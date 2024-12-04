@@ -50,6 +50,36 @@ class Result
     }
 
     /**
+     * 获取Code
+     * @access  public
+     * @return  int
+     */
+    public function getCode(): int
+    {
+        return $this->code;
+    }
+
+    /**
+     * 获取消息
+     * @access  public
+     * @return  string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * 获取数据
+     * @access  public
+     * @return  array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
      * 结果是否成功
      * @access  public
      * @return  bool

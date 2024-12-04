@@ -45,7 +45,7 @@ class Validate extends \think\Validate
     /**
      * 验证模型是否存在某条记录
      */
-    protected function dataExist($value, $rule, $data = [], $fieldName = ''): string|bool
+    protected function exist($value, $rule, $data = [], $fieldName = ''): string|bool
     {
         @list($modelName, $queryFieldName) = explode(',', $rule);
         if (strpos($modelName, '\\') === false) {
