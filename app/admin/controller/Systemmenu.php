@@ -93,9 +93,7 @@ class Systemmenu extends Basic
         ]);
     }
 
-    /**
-     * 获取菜单节点列表
-     */
+    #[Action('获取菜单节点列表')]
     public function getUserMenuNodes()
     {
         $this->returnList(Node::instance()->getUserMenuNodes($this->getSuid()));

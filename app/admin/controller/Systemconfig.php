@@ -35,9 +35,7 @@ class Systemconfig extends Basic
         );
     }
 
-    /**
-     * 基础配置
-     */
+    #[Action('基础配置')]
     public function basic()
     {
         $this->returnMap(SystemConfigModel::batchGet([

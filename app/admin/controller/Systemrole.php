@@ -115,17 +115,13 @@ class Systemrole extends Basic
         });
     }
 
-    /**
-     * 获取用户节点树
-     */
+    #[Action('获取用户节点树')]
     public function getUserNodeTree()
     {
         $this->returnList(Node::instance()->getUserActionNodeTree($this->getSuid()));
     }
 
-    /**
-     * 获取角色节点
-     */
+    #[Action('获取角色节点')]
     public function getRoleNodes()
     {
         $list = SystemRoleNode::where('srid', $this->request->get('srid'))
@@ -164,9 +160,7 @@ class Systemrole extends Basic
         $this->success();
     }
 
-    /**
-     * 获取用户角色
-     */
+    #[Action('获取用户角色')]
     public function getUserRole()
     {
         $list = SystemRoleModel::enable()
