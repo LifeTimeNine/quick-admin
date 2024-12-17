@@ -137,9 +137,7 @@ class Systemtask extends Basic
         }
     }
 
-    /**
-     * 通知
-     */
+    #[Action('结果通知')]
     public function notify()
     {
         $event = $this->request->post('event');
