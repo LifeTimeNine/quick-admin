@@ -13,6 +13,7 @@ class SystemConfig extends Model
     protected $pk = 'id';
     protected $table = 'system_config';
     protected $autoWriteTimestamp = false;
+    protected $json = ['value'];
 
     protected static $cachePrefix = 'system_config_';
 
@@ -35,30 +36,6 @@ class SystemConfig extends Model
 
     /** 键 系统名称 */
     const KEY_SYSTEM_NAME = 'system_name';
-
-    /**
-     * 值 修改器
-     */
-    public function setValueAttr($value, $data)
-    {
-        if (in_array($data['type'], [self::TYPE_LIST, self::TYPE_MAP])) {
-            return json_encode($value, JSON_UNESCAPED_UNICODE);
-        } else {
-            return $value;
-        }
-    }
-
-    /**
-     * 值 获取器
-     */
-    public function getValueAttr($value, $data)
-    {
-        if (in_array($data['type'], [self::TYPE_LIST, self::TYPE_MAP])) {
-            return json_decode($value, true);
-        } else {
-            return $value;
-        }
-    }
 
     /**
      * 获取配置

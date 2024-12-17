@@ -6,7 +6,7 @@ use attribute\Action;
 use attribute\Controller;
 use model\SystemConfig as SystemConfigModel;
 use traits\controller\QuickAction;
-use validate\SystemConfig as SystemConfigValidate;
+
 
 #[Controller('系统配置')]
 class Systemconfig extends Basic
@@ -25,8 +25,8 @@ class Systemconfig extends Basic
     {
         $this->_form(
             SystemConfigModel::class,
-            SystemConfigValidate::class . '.edit',
-            ['name', 'type', 'value'],
+            null,
+            ['value'],
             null,
             null,
             function($model, $data) {
@@ -35,9 +35,7 @@ class Systemconfig extends Basic
         );
     }
 
-    /**
-     * 基础配置
-     */
+    #[Action('基础配置')]
     public function basic()
     {
         $this->returnMap(SystemConfigModel::batchGet([

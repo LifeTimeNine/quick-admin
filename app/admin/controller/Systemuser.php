@@ -59,16 +59,14 @@ class Systemuser extends Basic
         Token::instance()->logout();
         $this->success();
     }
-    /**
-     * 获取用户信息
-     */
+
+    #[Action('获取用户信息')]
     public function userInfo()
     {
         $this->returnMap($this->getSystemUserModel()->visible(['username','avatar','name','mobile','email'])->toArray());
     }
-    /**
-     * 编辑用户信息
-     */
+
+    #[Action('编辑用户信息')]
     public function editUserInfo()
     {
         $data = $this->request->post();
@@ -78,9 +76,8 @@ class Systemuser extends Basic
         $this->getSystemUserModel()->allowField(['avatar','mobile','email'])->save($data);
         $this->success();
     }
-    /**
-     * 获取用户菜单
-     */
+
+    #[Action('获取用户菜单')]
     public function getMenu()
     {
         $node = Node::instance();
@@ -236,9 +233,8 @@ class Systemuser extends Basic
         ]);
         $this->success();
     }
-    /**
-     * 刷新信息
-     */
+
+    #[Action('刷新信息')]
     public function refresh()
     {
         Node::instance()->getUserNodes($this->getSuid(), true);
