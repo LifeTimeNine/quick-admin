@@ -2,16 +2,17 @@
 
 namespace app\admin\controller;
 
+use attribute\Action;
+use attribute\Controller;
 use response\Code;
 use service\Storage;
 use think\response\Json;
 use think\Response;
 
+#[Controller('上传文件')]
 class Upload extends Basic
 {
-    /**
-     * 获取上传参数
-     */
+    #[Action('获取上传参数')]
     public function info()
     {
         $storage = Storage::instance();
@@ -22,9 +23,7 @@ class Upload extends Basic
         $this->returnMap($res);
     }
 
-    /**
-     * 上传文件
-     */
+    #[Action('上传文件')]
     public function file()
     {
         /** @var \driver\storage\Local */
@@ -37,9 +36,7 @@ class Upload extends Basic
         }
     }
 
-    /**
-     * 获取切片上传参数
-     */
+    #[Action('获取切片上传参数')]
     public function partInfo()
     {
         $storage = Storage::instance();
@@ -50,9 +47,7 @@ class Upload extends Basic
         $this->returnMap($res);
     }
 
-    /**
-     * 获取单个切片参数
-     */
+    #[Action('获取切片参数')]
     public function partOptions()
     {
         $storage = Storage::instance();
@@ -67,9 +62,7 @@ class Upload extends Basic
         $this->returnList($options);
     }
 
-    /**
-     * 切片上传
-     */
+    #[Action('切片上传')]
     public function part()
     {
         $storage = Storage::instance();
@@ -82,9 +75,7 @@ class Upload extends Basic
         return Response::create()->code(204)->eTag($res['etag']);
     }
 
-    /**
-     * 切片上传完成
-     */
+    #[Action('切片上传完成')]
     public function partComplete()
     {
         $fileName = $this->request->post('fileName');

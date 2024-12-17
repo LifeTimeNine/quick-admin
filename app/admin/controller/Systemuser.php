@@ -21,9 +21,7 @@ class Systemuser extends Basic
 {
     use QuickAction;
 
-    /**
-     * 密码登录
-     */
+    #[Action('密码登录')]
     public function pwdLogin()
     {
         $username = $this->request->post('username');
@@ -51,9 +49,8 @@ class Systemuser extends Basic
             'access_token' => Token::instance()->build($user->id, 'login')
         ]);
     }
-    /**
-     * 退出登录
-     */
+
+    #[Action('退出登录')]
     public function logout()
     {
         Token::instance()->logout();
@@ -105,9 +102,7 @@ class Systemuser extends Basic
         ]);
     }
 
-    /**
-     * 修改密码
-     */
+    #[Action('修改密码')]
     public function modifyPwd()
     {
         if ($this->request->post('old_password') <> $this->getSystemUserModel()->password) {
