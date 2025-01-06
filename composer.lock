@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c35851189f0c851161fc7bd8ce929383",
+    "content-hash": "c925454bef45065b37afca9e1d46ce6b",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -541,16 +541,16 @@
         },
         {
             "name": "topthink/think-orm",
-            "version": "v3.0.30",
+            "version": "v3.0.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-orm.git",
-                "reference": "6d8bcc86c3f9aba5a92010c17b68aeb8ad05ad3a"
+                "reference": "6e0ea679f7448ff9c8906606462505597681e22e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-orm/zipball/6d8bcc86c3f9aba5a92010c17b68aeb8ad05ad3a",
-                "reference": "6d8bcc86c3f9aba5a92010c17b68aeb8ad05ad3a",
+                "url": "https://api.github.com/repos/top-think/think-orm/zipball/6e0ea679f7448ff9c8906606462505597681e22e",
+                "reference": "6e0ea679f7448ff9c8906606462505597681e22e",
                 "shasum": ""
             },
             "require": {
@@ -593,9 +593,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/think-orm/issues",
-                "source": "https://github.com/top-think/think-orm/tree/v3.0.30"
+                "source": "https://github.com/top-think/think-orm/tree/v3.0.33"
             },
-            "time": "2024-11-07T09:12:00+00:00"
+            "time": "2024-12-19T01:52:44+00:00"
         },
         {
             "name": "topthink/think-template",
@@ -706,8 +706,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -780,8 +780,8 @@
             "type": "metapackage",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -845,8 +845,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -1015,12 +1015,12 @@
             "type": "library",
             "extra": {
                 "think": {
-                    "services": [
-                        "think\\trace\\Service"
-                    ],
                     "config": {
                         "trace": "src/config.php"
-                    }
+                    },
+                    "services": [
+                        "think\\trace\\Service"
+                    ]
                 }
             },
             "autoload": {

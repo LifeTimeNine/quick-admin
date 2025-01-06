@@ -13,7 +13,6 @@ class SystemConfig extends Model
     protected $pk = 'id';
     protected $table = 'system_config';
     protected $autoWriteTimestamp = false;
-    protected $json = ['value'];
 
     protected static $cachePrefix = 'system_config_';
 
@@ -38,6 +37,30 @@ class SystemConfig extends Model
     const KEY_SYSTEM_NAME = 'system_name';
 
     /**
+     * 值 修改器
+     */
+    public function setValueAttr($value, $data)
+    {
+        if (is_array($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        } else {
+            return $value;
+        }
+    }
+
+    /**
+     * 值 获取器
+     */
+    public function getValueAttr($value, $data)
+    {
+        if (json_validate($value)) {
+            return json_decode($value, true);
+        } else {
+            return $value;
+        }
+    }
+
+    /**
      * 获取配置
      * @access  public
      * @param   string          $key        键
@@ -48,7 +71,7 @@ class SystemConfig extends Model
     {
         $cacheKey = self::$cachePrefix . $key;
         if (!Cache::has($cacheKey)) {
-            $value = static::where('key', $key)->value('value') ?: $default;
+            $value = static::where('key', $key)->field('value')->find()['value'] ?? null ?: $default;
             Cache::set($cacheKey, $value);
         } else {
             $value = Cache::get($cacheKey, $default);
