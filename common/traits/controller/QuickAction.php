@@ -4,7 +4,7 @@ namespace traits\controller;
 
 use basic\Model as BasicModel;
 use response\Code;
-use think\db\Query;
+use think\db\BaseQuery as Query;
 use think\db\Where;
 use think\Exception;
 use think\facade\Db;
